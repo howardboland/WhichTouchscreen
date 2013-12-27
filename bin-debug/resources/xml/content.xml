@@ -1,0 +1,53 @@
+<content root="resources/images/">
+
+	<component type="box">
+			
+
+			<component type="folder" x="-662.5" source="folder_01.jpg">
+			</component>
+
+				<component type="folder" x="-397.5" source="folder_02.jpg">
+
+				   
+			<component type="folder2" x="-530" source="folder_food_labelling.jpg">
+                        
+                        <component type="text" x="-500" y="0" source="board_banking_reforming.swf" />
+                        <component type="image" x="-150" y="0" source="blank.jpg" />
+                </component>
+                <component type="folder2" x="-265" source="folder_banking_reforming.jpg">
+                        <component type="text" x="-500" y="0" source="board_banking_reforming.swf" />
+                        <component type="image" x="-150" y="0" source="bank_reforming_01.jpg" />
+                </component>
+                <component type="folder2" x="0" source="folder_energy_prices.jpg">
+                	<component type="text" x="-500" y="0" source="board_banking_reforming.swf" />
+                        <component type="image" x="-150" y="0" source="blank.jpg" />
+                </component>
+                <component type="folder2" x="265" source="folder_nuisance_calls.jpg">
+                    <component type="text" x="-500" y="0" source="board_banking_reforming.swf" />
+                        <component type="image" x="-150" y="0" source="blank.jpg" />
+                </component>
+                <component type="folder2" x="530" source="folder_mobile_phone_contracts.jpg">
+                        <component type="text" x="-500" y="0" source="board_banking_reforming.swf" />
+                        <component type="image" x="-150" y="0" source="blank.jpg" />
+                </component>
+                
+					
+			
+			</component>
+
+			<component type="folder" x="-132.5" source="folder_03.jpg">
+			</component>
+
+			<component type="folder" x="132.5" source="folder_04.jpg">				
+			</component>
+
+			<component type="folder" x="397.5" source="folder_05.jpg">
+			</component>
+
+			<component type="folder" x="662.5" source="folder_06.jpg">
+			</component>
+
+			
+	</component>
+
+</content>
