@@ -16,7 +16,7 @@
 		]]>
 	</mx:Script>
 	<mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle" verticalGap="10">
-		<mx:Image source="@Embed('assets/splash.png')" />
+		<mx:Image source="@Embed('resources/images/which-logo.png')" />
 		 <mx:ProgressBar id="pb" label="" minimum="0" visible="true" maximum="100" direction="right" mode="manual" width="300"/>
 		<mx:HBox horizontalGap="8" id="errorBox" visible="false">
 			<mx:Image source="@Embed('assets/icons/error.png')" />
