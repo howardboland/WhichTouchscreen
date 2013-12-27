@@ -10,7 +10,6 @@ package controller
     import org.puremvc.as3.patterns.command.*;
     import org.puremvc.as3.patterns.observer.*;
     
-    import org.puremvc.as3.demos.flex.appskeleton.*;
     import model.*;
     
     /**

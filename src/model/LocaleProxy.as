@@ -10,7 +10,6 @@ package model
 	import org.puremvc.as3.interfaces.*;
     import org.puremvc.as3.patterns.proxy.Proxy;
 	
-	import org.puremvc.as3.demos.flex.appskeleton.*;
 	import model.business.*;
 	import model.helpers.*;
 

@@ -13,7 +13,6 @@ package view
 	import org.puremvc.as3.interfaces.*;
 	import org.puremvc.as3.patterns.mediator.Mediator;
 
-	import org.puremvc.as3.demos.flex.appskeleton.*;
 	import model.*;
 	import view.components.*;
 
