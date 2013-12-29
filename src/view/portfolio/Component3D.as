@@ -142,33 +142,33 @@
             }
         }
 
-        public function getNextComponent(modula:Boolean = false) : Component3D
-        {
-            var _loc_2:* = findNextIndex();
-            if (_loc_2 != -1)
-            {
-                return this.parent.childs[_loc_2];
-            }
-            if (modula)
-            {
-                return getPreviousComponent();
-            }
-            return null;
-        }
+		public function getNextComponent(modula:Boolean = false) : Component3D
+		{
+			var i:int = findNextIndex();
+			if (i != -1)
+			{
+				return this.parent.childs[i];
+			}
+			if (modula)
+			{
+				return this.parent.childs[0];
+			}
+			return null;
+		}
 
-        public function getPreviousComponent(modula:Boolean = false) : Component3D
-        {
-            var _loc_2:* = findPreviousIndex();
-            if (_loc_2 != -1)
-            {
-                return this.parent.childs[_loc_2];
-            }
-            if (modula)
-            {
-                return getNextComponent();
-            }
-            return null;
-        }
+		public function getPreviousComponent(modula:Boolean = false) : Component3D
+		{
+			var i:int = findPreviousIndex();
+			if (i != -1)
+			{
+				return this.parent.childs[i];
+			}
+			if (modula)
+			{
+				return this.parent.childs[this.parent.childs.length-1];
+			}
+			return null;
+		}
 
         protected function findNextIndex() : int
         {

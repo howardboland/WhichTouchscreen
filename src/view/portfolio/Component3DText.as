@@ -431,7 +431,7 @@
                 main.setNextPreviousArrows(true);
                 main.stage.addEventListener("resize", placeImage);
                 placeImage(null);
-                activateURLButton();
+               // activateURLButton();
             }
         }
 
