@@ -1,4 +1,4 @@
-﻿package 
+﻿package  
 {
     import caurina.transitions.*;
     
@@ -13,6 +13,7 @@
     
     import org.papervision3d.cameras.*;
     import org.papervision3d.core.geom.renderables.*;
+    import org.papervision3d.core.render.sort.NullSorter;
     import org.papervision3d.materials.*;
     import org.papervision3d.materials.utils.*;
     import org.papervision3d.objects.*;
@@ -33,6 +34,7 @@
     import view.portfolio.Container3D;
     import view.portfolio.Image;
     import view.portfolio.XYZ;
+    
 
     public class Application extends Sprite
     {
@@ -233,12 +235,12 @@
             scene.addChild(loading);
 			
 			
-			
-            loader = new URLLoader(new URLRequest("resources/xml/content.xml"));
+			var contentURL:URLRequest = new URLRequest("services/tree.php");
+            loader = new URLLoader(contentURL);
 			
             loader.addEventListener( Event.COMPLETE, function (event:Event) : void
             {
-				Console.log("Content data - loaded:"+"resources/xml/content.xml", this);
+				Console.log("Content data - loaded:"+contentURL.url, this);
                 content = new XML(event.target.data);
                 Application.ROOTPATH = content.@root.toString();
                 Console.log("ROOTPATH SET TO:" + Application.ROOTPATH, this);
@@ -632,7 +634,7 @@
 
         private function setChildsAppear(component:Component3D, delay:Number) : void
         {
-			Console.log("setChildsAppear", this);
+			//Console.log("setChildsAppear", this);
             for each (var m:Component3D in component.childs)
             {
                 setAppear(m, delay);
@@ -678,7 +680,7 @@
                     (m as Component3DImage).setHighResolution(enable);
                     continue;
                 }
-                if (!(m.type == "text" || m.type == "board"))
+                if (!(m.type == "text" || m.type == "board" || m.type == "template"))
                 {
                     continue;
                 }
@@ -794,7 +796,7 @@
             shapeBackground.visible = show;
         }
 
-		private function createComponent(childindex:Array, component:Component3D, delay:Number):Component3D
+		private function createComponent(childindex:Array, component:Component3D, id:Number):Component3D
 		{
 			var comp:Component3D;
 			var xml:XML = getComponentXML(childindex);
@@ -802,29 +804,32 @@
 			
 			
 			// trace("Application.createComponent(): " + type);
+			
+		
+			//Console.log( "Creating Component:" + type +" "+ xml, this);
 			switch (type) 
 			{
 				case "box":
-					
-					comp = new Component3DBox(childindex, this, type, delay);
+					comp = new Component3DBox(childindex, this, type, id);
 					break;
 				case "image":
-					comp = new Component3DImage(childindex, this, "image", ROOTPATH + xml.attribute("source"), delay);
+					comp = new Component3DImage(childindex, this, type, ROOTPATH + xml.attribute("source"), id);
 					break;
 				case "board":
-					
-					comp = new Component3DText(childindex, this, type, ROOTPATH + xml.attribute("source"), delay);
+					comp = new Component3DText(childindex, this, type, ROOTPATH + xml.attribute("source"), id, (xml.attribute("data").length() > 0) ? xml.attribute("data") : null);
 					break;
 				case "text":
-					
-					comp = new Component3DText(childindex, this, type, ROOTPATH + xml.attribute("source"), delay);
+					comp = new Component3DText(childindex, this, type, ROOTPATH + xml.attribute("source"), id, (xml.attribute("data").length() > 0) ? xml.attribute("data") : null);
+					break;
+				case "template":
+					comp = new Component3DText(childindex, this, type, ROOTPATH + xml.attribute("source"), id, (xml.attribute("data").length() > 0) ? xml.attribute("data") : null);
 					break;
 				//All same type
 				case "folder":
 				case "fresh":
 				case "folder2":
 				case "hot":
-					comp = new Component3DFolder(childindex, this, type, ROOTPATH + xml.attribute("source"), delay);
+					comp = new Component3DFolder(childindex, this, type, ROOTPATH + xml.attribute("source"), id);
 					if (type == "hot")
 					{
 						(comp as Component3DFolder).isHot = true;
@@ -835,7 +840,7 @@
 					}
 					break;
 				case "video":
-					comp = new Component3DVideo(childindex, this, type, ROOTPATH + xml.source, xml.format, delay);
+					comp = new Component3DVideo(childindex, this, type, ROOTPATH + xml.source, xml.format, id);
 					break;
 			}
 			comp.parent = component;

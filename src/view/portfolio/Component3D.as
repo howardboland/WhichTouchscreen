@@ -5,7 +5,6 @@
     import flash.events.*;
     
     import org.papervision3d.objects.*;
-    
     import view.portfolio.Component3D;
 
     public class Component3D extends Object

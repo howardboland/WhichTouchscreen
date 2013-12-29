@@ -1,13 +1,17 @@
 ﻿package view.portfolio 
 {
-    import view.portfolio.Component3DFolder;
     import caurina.transitions.*;
+    
     import com.which.utils.*;
+    
     import flash.events.*;
     import flash.utils.*;
+    
     import org.papervision3d.materials.*;
     import org.papervision3d.objects.*;
     import org.papervision3d.objects.primitives.*;
+    
+    import view.portfolio.Component3DFolder;
 
     public class Component3DFolder extends Component3D
     {
@@ -153,20 +157,17 @@
                 {
                     loading.visible = false;
                 }
-                return;
             }
             , onUpdate:function () : void
             {
                 displayobject.x = border.x;
                 displayobject.y = border.y;
                 displayobject.z = border.z - 25.001;
-                return;
             }
             , onComplete:function () : void
             {
                 main.scene.removeChild(border);
                 main.scene.removeChild(displayobject);
-                return;
             }
             });
             if (isHot)
@@ -174,7 +175,6 @@
                 Tweener.addTween(hot, {delay:myDelay, time:SHOW_INTERVAL, transition:"easeInOutQuad", _bezier:[{x:x + 97, y:(parent.y + y) / 2 - 600 + 195, z:parent.z - 30 - 25}, {x:(parent.x + x) / 2 + 97, y:(parent.y + y) / 2 - 600 + 195, z:parent.z - 30 - 25}], x:parent.x, y:parent.y, z:parent.z, onComplete:function () : void
             {
                 main.scene.removeChild(hot);
-                return;
             }
             });
             }
@@ -199,21 +199,18 @@
                 displayobject.x = border.x;
                 displayobject.y = border.y;
                 displayobject.z = border.z - 25.001;
-                return;
             }
             , z:z - 480 / 2, onUpdate:function () : void
             {
                 displayobject.x = border.x;
                 displayobject.y = border.y;
                 displayobject.z = border.z - 25.001;
-                return;
             }
             , onComplete:function () : void
             {
                 displayobject.x = border.x;
                 displayobject.y = border.y;
                 displayobject.z = border.z - 25.001;
-                return;
             }
             });
             main.scene.addChild(glow);
@@ -226,7 +223,6 @@
                 glow.scale = 0.5;
                 glow.visible = true;
                 main.addEventListener( Event.ENTER_FRAME, glowRotationHandler);
-                return;
             }
             , scale:1, z:z - 480 / 4});
             Tweener.addTween(glow.container, {delay:myDelay, time:OPEN_INTERVAL, transition:"easeOutQuad", onStart:function () : void
@@ -234,7 +230,6 @@
                 glow.container.blendMode = "screen";
                 glow.container.mouseEnabled = false;
                 glow.container.alpha = 0;
-                return;
             }
             , alpha:1});
             Tweener.addTween(handlertop, {delay:myDelay, time:OPEN_INTERVAL, transition:"easeInOutQuad", rotationX:-15});
@@ -357,32 +352,38 @@
 			var loadingDone:Boolean = false;
 			loading.rotationZ = loading.rotationZ + main.deltatime * 1000;
 			setMouseEnabled(false);
-			if (index.length == 3 && getTimer() - startTime > parent.childs.length * 0.1 * 1000)
+			//Console.log(" initiating child ", this);
+			//if (index.length == 3 && getTimer() - startTime > parent.childs.length * 0.1 * 1000)
 			{
 				if (parent.loadingIndex == ID)
 				{
 					i = 0;
 					while (i < childs.length)
 					{
-						
 						if (!childs[i].inited)
 						{
 							childs[i].init();
+							//Console.log(i+" initiating child "+ childs[i], this);
+
 						}
-						i = i + 1;
+						i++;
 					}
 				}
 			}
+			
 			loadingDone = true;
 			for each (var m:Component3D in childs)
 			{
 				
-				if (m.isLoaded())
+				if (!m.isLoaded())
 				{
-					continue;
-				}
-				loadingDone = false;
+					//Console.log("Still loading:"+m, m);
+					loadingDone = false;
+				} 
+				
 			}
+			
+			Console.log("isLoaded :"+ loadingDone +" && "+displayobject.container+" && "+(!main.isMoving), this);
 			if (loadingDone && displayobject.container && !main.isMoving)
 			{
 				loadedIndex = parent.loadingIndex + 1;
@@ -392,6 +393,9 @@
 				loading = null;
 				setMouseListener(true);
 				setMouseEnabled(true);
+			} else 
+			{
+				
 			}
 		}
 

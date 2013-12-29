@@ -4,7 +4,7 @@
     
     import flash.display.*;
     import flash.events.*;
-    
+
     import view.portfolio.Buttons;
 
     public class Buttons extends Sprite
@@ -24,11 +24,11 @@
         private var next:SimpleButton;
         private var previous:SimpleButton;
 
-        public function Buttons(param1:Application, param2:Array, param3:Array)
+        public function Buttons(application:Application, childIndex:Array, activeComponents:Array)
         {
-            main = param1;
-            components = param2;
-            componentsActive = param3;
+            main = application;
+            components = childIndex;
+            componentsActive = activeComponents;
             init();
             return;
         }// end function

@@ -1,10 +1,13 @@
 ﻿package view.portfolio 
 {
-    import view.portfolio.SWF;
+    import com.which.utils.Console;
+    
     import flash.display.*;
     import flash.events.*;
     import flash.net.*;
     import flash.system.*;
+    
+    import view.portfolio.SWF;
 
     public class SWF extends Sprite
     {
@@ -27,14 +30,18 @@
 
         private function errorHandler(event:IOErrorEvent) : void
         {
-            trace("error");
+            Console.log("Error: "+event.text, this);
             loader = null;
         }
 
         private function completeHandler(event:Event) : void
         {
+			//swf loaded
+			
             addChild(loader);
             loaded = true;
+			//Console.log("completeHandler: "+loaded, this);
+			this.dispatchEvent( new Event("SWFLOADED") );
         }
 
     }

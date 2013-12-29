@@ -2,6 +2,7 @@
 {
     import caurina.transitions.*;
     
+    import com.which.template.events.TemplateEvent;
     import com.which.utils.*;
     
     import flash.display.*;
@@ -29,20 +30,30 @@
         private var showInterval:Number;
         private var startTime:Number;
         private var url:String;
+		private var dataURL:String;
         private var highresolutionPage:Image;
         private var internalActive:Boolean = false;
+		private var isTemplateLoaded:Boolean = false;
 
-        public function Component3DText(childIndex:Array, application:Application, type:String, url:String, id:Number) 
+        public function Component3DText(childIndex:Array, application:Application, type:String, url:String, id:Number, dataURL:String) 
         {
             super(childIndex, application, type, id);
             this.url = url;
+			this.dataURL = dataURL;
+			if (this.dataURL!=null)
+			{
+				//load with external data loading parameter
+				this.url += "?dataURL="+escape(this.dataURL);
+				//Console.log("URL :"+ this.url + "?dataURL="+escape(this.dataURL), this);
+			}
         }
 
         override public function init() : void
         {
-            Console.log("init", this);
+            
+			//Console.log("URL :"+ this.url, this);
             inited = true;
-            if (type != "text")
+            if (type != "text" && type != "template")
             {
                 if (type == "board")
                 {
@@ -60,7 +71,15 @@
             openInterval = 0.35;
             openDelay = childs.length * 0.1 + 0.5;
             highresolutionText = new SWF(url, true);
-            if (type != "text")
+			if (this.dataURL!=null)	
+			{
+				isTemplateLoaded = false;
+				highresolutionText.addEventListener("SWFLOADED", templateLoadListener);
+			} else
+			{
+				isTemplateLoaded = true;
+			}
+            if (type != "text" && type != "template")
             {
                 if (type == "board")
                 {
@@ -71,9 +90,10 @@
             {
                 highresolutionPage = new Image("resources/core/page.jpg", true, false);
             }
+			Console.log("objectbreak 1 highresolutionPage && highresolutionText "+ highresolutionPage+" && "+highresolutionText, this)
             highresolution = new Sprite();
-            highresolution.addChild(highresolutionPage);
-            highresolution.addChild(highresolutionText);
+            highresolution.addChild(highresolutionPage); // background
+            highresolution.addChild(highresolutionText); // swf
             highresolution.mouseEnabled = false;
             highresolutionPage.addEventListener( MouseEvent.MOUSE_UP, releaseHandler);
             highresolutionPage.addEventListener( MouseEvent.ROLL_OVER, rolloverHandler);
@@ -83,7 +103,8 @@
             highresolutionText.addEventListener( MouseEvent.ROLL_OUT, rolloutHandler);
             main.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
             highresolution.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-            return;
+			Console.log("objectbreak 2 highresolutionPage  && highresolutionText "+ highresolutionPage+" && "+highresolutionText, this)
+
         }
 
         private function hidePopup() : void
@@ -92,7 +113,6 @@
             {
                 main.setPopupVisible();
             }
-            return;
         }
 
         private function enterFrameHandler(event:Event) : void
@@ -102,75 +122,70 @@
                 popupVisible = false;
                 hidePopup();
             }
-            return;
         }
 
         private function startPopupTimeout() : void
         {
             startTime = getTimer();
             popupVisible = true;
-            return;
         }
 
-        override public function setAnimationDisappear(param1:Number = 0) : Number
+        override public function setAnimationDisappear(delay:Number = 0) : Number
         {
-			var theExecutionDelay:Number = param1;
+			var theExecutionDelay:Number = delay;
             var myDelay:* = showDelay + theExecutionDelay;
-            if (type != "text")
+            if (type != "text" && type != "template")
             {
-                if (type == "board")
+                if (type == "board" )
                 {
                     setMouseListener(false);
                     Tweener.addTween(displayobject, {delay:myDelay, time:showInterval, transition:"easeinoutquad", _bezier:[{x:x, y:(parent.y + y) / 2 - 600, z:parent.z}, {x:(parent.x + x) / 2, y:(parent.y + y) / 2 - 600, z:parent.z}], x:parent.x, y:parent.y, z:parent.z, onComplete:function () : void
-            {
-                main.scene.removeChild(displayobject);
-                return;
-            }
-            });
+		            {
+		                main.scene.removeChild(displayobject);
+		            }
+		            });
                 }
             }
             else
             {
                 setMouseListener(false);
                 Tweener.addTween(displayobject, {delay:myDelay, time:showInterval, transition:"easeinoutquad", onStart:function () : void
-            {
-                displayobject.material.doubleSided = true;
-                return;
-            }
-            , _bezier:[{x:x, y:y + 400, z:z, rotationX:0, rotationY:0, rotationZ:-45}, {x:parent.x, y:parent.y + 400, z:(parent.z + z) / 2, rotationX:0, rotationY:90, rotationZ:-60}, {x:parent.x, y:parent.y + 400, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90}], x:parent.x, y:parent.y, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90, onComplete:function () : void
-            {
-                main.scene.removeChild(displayobject);
-                return;
-            }
-            });
+	            {
+	                displayobject.material.doubleSided = true;
+	            }
+	            , _bezier:[{x:x, y:y + 400, z:z, rotationX:0, rotationY:0, rotationZ:-45}, {x:parent.x, y:parent.y + 400, z:(parent.z + z) / 2, rotationX:0, rotationY:90, rotationZ:-60}, {x:parent.x, y:parent.y + 400, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90}], x:parent.x, y:parent.y, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90, onComplete:function () : void
+	            {
+	                main.scene.removeChild(displayobject);
+	            }
+	            });
             }
             return myDelay + showInterval;
         }
 
-        private function placeImage(event:Event) : void
-        {
-            highresolution.x = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
-            highresolution.y = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
-            Console.log("placeimage x" + 330 * Application.scale + " main.container3D.x" + main.container3D.x + "- highresolution.x" + highresolution.x, this);
-            var _loc_3:* = 660;
-            var _loc_2:* = 340;
-            if (width > height)
-            {
-                highresolution.width = _loc_3 * Application.scale + main.container3D.x - highresolution.x;
-                highresolution.height = _loc_2 * Application.scale + main.container3D.y - highresolution.y;
-            }
-            else
-            {
-                highresolution.width = _loc_2 * Application.scale + main.container3D.x - highresolution.x;
-                highresolution.height = _loc_3 * Application.scale + main.container3D.y - highresolution.y;
-            }
-            return;
-        }
+		private function placeImage(event:Event) : void
+		{
+			highresolution.x = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
+			highresolution.y = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
+			//Console.log("placeimage x" + 330 * Application.scale + " main.container3D.x" + main.container3D.x + "- highresolution.x" + highresolution.x, this);
+			var w:Number = 1280/2;
+			var h:Number = 720/2;
+			if (width > height)
+			{
+				highresolution.width = w * Application.scale + main.container3D.x - highresolution.x;
+				highresolution.height = h * Application.scale + main.container3D.y - highresolution.y;
+			}
+			else
+			{
+				highresolution.width = h * Application.scale + main.container3D.x - highresolution.x;
+				highresolution.height = w * Application.scale + main.container3D.y - highresolution.y;
+			}
+			
+		}
 
         override public function setAnimationOpen() : Number
         {
             var myDelay:Number;
-            if (type != "text")
+            if (type != "text" && type != "template")
             {
                 if (main.depth != depth)
                 {
@@ -180,11 +195,10 @@
                 isOpen = true;
                 main.setHighResolution(false);
                 Tweener.addTween(this, {time:0.7, delay:myDelay, onComplete:function () : void
-            {
-                setHighResolution(true);
-                return;
-            }
-            });
+	            {
+	                setHighResolution(true);
+	                return;
+	            }});
                 main.setAnimationZoomIn(displayobject, myDelay, 1);
             }
             else
@@ -193,17 +207,16 @@
                 isOpen = true;
                 main.setHighResolution(false);
                 Tweener.addTween(this, {time:0.7, onComplete:function () : void
-            {
-                setHighResolution(true);
-                return;
-            }
-            });
+	            {
+	                setHighResolution(true);
+	                return;
+	            }});
                 main.setAnimationZoomIn(displayobject, 0, 1);
             }
             return 0.7;
         }
 
-        override public function rolloverHandler(event:MouseEvent) : void
+        override public function rolloverHandler(e:MouseEvent) : void
         {
 			switch (isOpen) 
 			{
@@ -223,40 +236,62 @@
 					break;
 			}
         }
+		protected function templateLoadListener( e:Event ):void
+		{
+			highresolutionText.removeEventListener("SWFLOADED", templateLoadListener);
+			var template:MovieClip = (highresolutionText.loader.contentLoaderInfo.content as MovieClip) as MovieClip;
+			
+			Console.log("templateLoadListener ", this);
+			template.addEventListener( TemplateEvent.LOADED, templateLoaded);
+			template.addEventListener( TemplateEvent.ERROR, templateError);
+		}
+		protected function templateLoaded( e:Event ):void
+		{
+			Console.log("templateLoaded ",this);
+			this.isTemplateLoaded = true;
+		}
+		protected function templateError( e:Event ):void
+		{
+			
+			this.isTemplateLoaded = true;
+			//TODO: notify about the error
+		}
 
-        override public function isLoaded() : Boolean
-        {
-            var _loc_1:* = null;
-            var _loc_4:* = null;
-            var _loc_3:* = 1.1;
-            var _loc_2:* = 1;
-            if (highresolutionPage && highresolutionText)
-            {
-                if (highresolutionPage.loaded && highresolutionText.loaded)
-                {
-                    _loc_1 = new Matrix();
-                    if (width > height)
-                    {
-                        _loc_1.scale(width / 1280, height / 720);
-                    }
-                    else
-                    {
-                        _loc_1.scale(width / 720, height / 1280);
-                    }
-                    highresolutionText.filters = [new BlurFilter(_loc_3, _loc_3, 3)];
-                    highresolutionText.alpha = _loc_2;
-                    _loc_4 = new BitmapData(width, height);
-                    _loc_4.draw(highresolution, _loc_1, null, null, null, true);
-                    highresolutionText.filters = null;
-                    highresolutionText.alpha = 1;
-                    displayobject = new Plane(new BitmapMaterial(_loc_4), width, height);
-                    displayobject.material.smooth = true;
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
+		override public function isLoaded() : Boolean
+		{
+			//TODO:: Add special case for template
+			if (highresolutionPage && highresolutionText)
+			{
+				//Console.log("isLoaded :"+highresolutionPage.loaded+" && "+highresolutionText.loaded+" && "+isTemplateLoaded, this);
+				if (highresolutionPage.loaded && highresolutionText.loaded && isTemplateLoaded )
+				{
+					var matrix:Matrix = new Matrix();
+					if (width > height)
+					{
+						matrix.scale(width / 1280, height / 720);
+					}
+					else
+					{
+						matrix.scale(width / 720, height / 1280);
+					}
+					var blurStrength:Number = 1.1;
+					highresolutionText.filters = [new BlurFilter(blurStrength, blurStrength, 3)];
+					highresolutionText.alpha = 1;
+					var bd:BitmapData = new BitmapData(width, height);
+					bd.draw(highresolution, matrix, null, null, null, true);
+					highresolutionText.filters = null;
+					highresolutionText.alpha = 1;
+					displayobject = new Plane(new BitmapMaterial(bd), width, height);
+					displayobject.material.smooth = true;
+					return true;
+				}
+				return false;
+			} else {
+				Console.log("objectbreak 3 highresolutionPage && highresolutionText "+ highresolutionPage+" && "+highresolutionText, this)
+			}
+			
+			return false;
+		}
 
         override public function setAnimationClose() : Number
         {
@@ -269,78 +304,70 @@
             return 0.7;
         }
 
-        override public function rolloutHandler(event:MouseEvent) : void
+        override public function rolloutHandler(e:MouseEvent) : void
         {
             main.setPopupVisible();
-            return;
         }
 
-        public function mouseMoveHandler(event:MouseEvent) : void
+        public function mouseMoveHandler(e:MouseEvent) : void
         {
             if (isOpen)
             {
                 main.setPopupVisible(1);
                 startPopupTimeout();
             }
-            return;
         }
 
-        override public function setAnimationAppear(param1:Number = 0) : Number
+        override public function setAnimationAppear(delay:Number = 0) : Number
         {
-			var theExecutionDelay:Number = param1;
+			var theExecutionDelay:Number = delay;
+			var myDelay:int = showDelay + theExecutionDelay;
             if (index.length == 2)
             {
-                var loc3:* = parent;
-                var loc4:* = (parent.loadingIndex + 1);
-                loc3.loadingIndex = loc4;
+                var newIndex:int = (parent.loadingIndex + 1);
+				parent.loadingIndex = newIndex;
             }
-            if (type != "text")
+            if (type != "text"  && type != "template")
             {
                 if (type == "board")
                 {
-                    var myDelay:* = showDelay + theExecutionDelay;
+                  
                     main.scene.addChild(displayobject);
                     displayobject.visible = false;
                     Tweener.addTween(displayobject, {delay:myDelay, time:showInterval, transition:"EaseinOutQuad", onStart:function () : void
-            {
-                displayobject.visible = true;
-                displayobject.x = parent.x;
-                displayobject.y = parent.y;
-                displayobject.z = parent.z;
-                return;
-            }
-            , _bezier:[{x:(parent.x + x) / 2, y:(parent.y + y) / 2 - 600, z:parent.z}, {x:x, y:(parent.y + y) / 2 - 600, z:parent.z}], x:x, y:y, z:z, onComplete:function () : void
-            {
-                setMouseListener(true);
-                return;
-            }
-            });
+		            {
+		                displayobject.visible = true;
+		                displayobject.x = parent.x;
+		                displayobject.y = parent.y;
+		                displayobject.z = parent.z;
+		            }
+		            , _bezier:[{x:(parent.x + x) / 2, y:(parent.y + y) / 2 - 600, z:parent.z}, {x:x, y:(parent.y + y) / 2 - 600, z:parent.z}], x:x, y:y, z:z, onComplete:function () : void
+		            {
+		                setMouseListener(true);
+		            }});
                 }
             }
             else
             {
-                myDelay = showDelay + theExecutionDelay;
-                main.scene.addChild(displayobject);
+				Console.log("displayobject:"+displayobject,this)
+				main.scene.addChild(displayobject);
                 displayobject.visible = false;
                 Tweener.addTween(displayobject, {delay:myDelay, time:showInterval, transition:"EaseInOutQuad", onStart:function () : void
-            {
-                displayobject.visible = true;
-                displayobject.x = parent.x;
-                displayobject.y = parent.y;
-                displayobject.z = parent.z;
-                displayobject.rotationX = 0;
-                displayobject.rotationY = 180;
-                displayobject.rotationZ = -90;
-                displayobject.material.doubleSided = true;
-                return;
-            }
-            , _bezier:[{x:parent.x, y:parent.y + 400, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90}, {x:parent.x, y:parent.y + 400, z:(parent.z + z) / 2, rotationX:0, rotationY:90, rotationZ:-60}, {x:x, y:y + 400, z:z, rotationX:0, rotationY:0, rotationZ:-45}], x:x, y:y, z:z, rotationX:0, rotationY:0, rotationZ:0, onComplete:function () : void
-            {
-                displayobject.material.doubleSided = false;
-                setMouseListener(true);
-                return;
-            }
-            });
+	            {
+	                displayobject.visible = true;
+	                displayobject.x = parent.x;
+	                displayobject.y = parent.y;
+	                displayobject.z = parent.z;
+	                displayobject.rotationX = 0;
+	                displayobject.rotationY = 180;
+	                displayobject.rotationZ = -90;
+	                displayobject.material.doubleSided = true;
+	            }
+	            , _bezier:[{x:parent.x, y:parent.y + 400, z:parent.z, rotationX:0, rotationY:180, rotationZ:-90}, {x:parent.x, y:parent.y + 400, z:(parent.z + z) / 2, rotationX:0, rotationY:90, rotationZ:-60}, {x:x, y:y + 400, z:z, rotationX:0, rotationY:0, rotationZ:-45}], x:x, y:y, z:z, rotationX:0, rotationY:0, rotationZ:0, onComplete:function () : void
+	            {
+	                displayobject.material.doubleSided = false;
+	                setMouseListener(true);
+	            }});
             }
             return myDelay + showInterval;
         }
@@ -354,7 +381,7 @@
 				main.setClosedOfDepth(depth);
 				setHighResolution(false);
 				Console.log("Pan to component:" + component, this);
-				if (component.type == "text" || component.type == "board")
+				if (component.type == "text" || component.type == "board" || component.type == "template")
 				{
 					(component as Component3DText).setAnimationOpen();
 				}
@@ -374,7 +401,7 @@
 				main.setClosedOfDepth(depth);
 				setHighResolution(false);
 				Console.log("Pan to component:" + component, this);
-				if (component.type == "text" || component.type == "board")
+				if (component.type == "text" || component.type == "board" || component.type == "template")
 				{
 					(component as Component3DText).setAnimationOpen();
 				}
@@ -406,7 +433,6 @@
                 placeImage(null);
                 activateURLButton();
             }
-            return;
         }
 
 		protected function activateURLButton() : void
