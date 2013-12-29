@@ -86,7 +86,7 @@
 
 		public function releaseHandler(e:Event=null):void
 		{
-			//Console.log("CLICK - open ? "+isOpen, this);
+			Console.log("releaseHandler", this);
 			if (isOpen) 
 			{
 				setAnimationClose();

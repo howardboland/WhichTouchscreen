@@ -98,7 +98,10 @@
             highresolutionPage.addEventListener( MouseEvent.MOUSE_UP, releaseHandler);
             highresolutionPage.addEventListener( MouseEvent.ROLL_OVER, rolloverHandler);
             highresolutionPage.addEventListener( MouseEvent.ROLL_OUT, rolloutHandler);
-            highresolutionText.addEventListener( MouseEvent.MOUSE_UP, releaseHandler);
+			if (this.dataURL==null)	
+			{
+	           	 highresolutionText.addEventListener( MouseEvent.MOUSE_UP, releaseHandler);
+			}
             highresolutionText.addEventListener( MouseEvent.ROLL_OVER, rolloverHandler);
             highresolutionText.addEventListener( MouseEvent.ROLL_OUT, rolloutHandler);
             main.addEventListener( Event.ENTER_FRAME, enterFrameHandler);
@@ -244,6 +247,7 @@
 			Console.log("templateLoadListener ", this);
 			template.addEventListener( TemplateEvent.LOADED, templateLoaded);
 			template.addEventListener( TemplateEvent.ERROR, templateError);
+			template.addEventListener( TemplateEvent.CLICK_BG, releaseHandler);
 		}
 		protected function templateLoaded( e:Event ):void
 		{

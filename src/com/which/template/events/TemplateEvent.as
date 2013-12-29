@@ -7,6 +7,7 @@ package com.which.template.events
 		public static var OPEN_URL:String = "OPEN_URL";
 		public static var LOADED:String = "LOADED";
 		public static var ERROR:String = "ERROR";
+		public static var CLICK_BG:String = "CLICK_BG";
 		public var url:String;
 		
 		public function TemplateEvent(type:String="", url:String="", bubbles:Boolean=false, cancelable:Boolean=false)
