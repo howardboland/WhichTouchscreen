@@ -248,6 +248,12 @@
 			template.addEventListener( TemplateEvent.LOADED, templateLoaded);
 			template.addEventListener( TemplateEvent.ERROR, templateError);
 			template.addEventListener( TemplateEvent.CLICK_BG, releaseHandler);
+			template.addEventListener( TemplateEvent.OPEN_URL, openURL);
+			
+		}
+		protected function openURL( e:TemplateEvent ):void
+		{
+			this.main.openURL( e );
 		}
 		protected function templateLoaded( e:Event ):void
 		{
@@ -435,38 +441,7 @@
                 main.setNextPreviousArrows(true);
                 main.stage.addEventListener("resize", placeImage);
                 placeImage(null);
-               // activateURLButton();
             }
-        }
-
-		protected function activateURLButton() : void
-		{
-			var btn:MovieClip;
-			var template:MovieClip = highresolutionText.loader.contentLoaderInfo.content as MovieClip;
-			Console.log("activateURLButton btn:" + template.getChildByName("btn"), this);
-			if (template.getChildByName("btn"))
-			{
-				btn = template.getChildByName("btn") as MovieClip;
-				btn.addEventListener( MouseEvent.ROLL_OVER, rolloverURL);
-				btn.addEventListener( MouseEvent.ROLL_OUT, rolloutURL);
-				btn.addEventListener( MouseEvent.CLICK, openURL);
-			}
-		}
-
-        protected function rolloverURL(e:MouseEvent) : void
-        {
-            internalActive = true;
-        }
-
-        protected function rolloutURL(e:MouseEvent) : void
-        {
-            internalActive = false;
-        }
-
-        protected function openURL(e:MouseEvent) : void
-        {
-            Console.log("OpenURL", this);
-            e.stopPropagation();
         }
 
     }

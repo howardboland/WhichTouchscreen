@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:NavigatorContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="onCreate(event)"  width="1280" height="720">
+	<fx:Script>
+		<![CDATA[
+			import com.which.utils.Console;
+			public static var VIDEO_LOOPED:String = "VIDEO_LOOPED";
+			protected var timeoutLoops:int = 0;
+			protected var loopCounts:int = 0;
+			protected function onCreate( e:Event ):void
+			{
+				Console.log("onCreate", this);
+				
+				
+				
+			}
+			public function onInit( e:Event=null ):void
+			{
+				Console.log("onInit", this);
+				if (video!=null)
+				{
+					video.loop = true;
+					video.play();
+					video.removeEventListener( Event.COMPLETE, onComplete );
+					video.addEventListener( Event.COMPLETE, onComplete );
+				}	
+			}
+			protected function onComplete( e:Event ):void
+			{
+				Console.log("onComplete", this);
+				video.removeEventListener( Event.COMPLETE, onComplete );
+
+				//if (loopCounts<timeoutLoops)
+				//{
+			//		loopCounts++;	
+			//	} else {
+				
+					
+					Console.log("onComplete pausing!", this);
+					video.loop = false;
+					video.pause();
+					//video.stop();
+					this.dispatchEvent( new Event( VIDEO_LOOPED ));
+					
+					loopCounts = 0;
+			//	}
+				
+				
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:VideoDisplay creationComplete="onInit(event)" autoRewind="false" id="video" loop="false" width="1280" height="720" scaleMode="none"  source="resources/video/sample.mp4">
+	</s:VideoDisplay>
+</s:NavigatorContent>

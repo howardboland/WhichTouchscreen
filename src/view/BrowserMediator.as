@@ -5,6 +5,8 @@
 */
 package view
 {
+	import com.which.utils.Console;
+	
 	import flash.events.Event;
 	
 	import model.*;
@@ -17,22 +19,23 @@ package view
     /**
      * A Mediator for interacting with the SplashScreen component.
      */
-    public class SplashScreenMediator extends Mediator implements IMediator
+    public class BrowserMediator extends Mediator implements IMediator
     {
         // Cannonical name of the Mediator
-        public static const NAME:String = "SplashScreenMediator";
+        public static const NAME:String = "BrowserMediator";
         
         /**
          * Constructor. 
          */
-        public function SplashScreenMediator( viewComponent:SplashScreen ) 
+        public function BrowserMediator( viewComponent:BrowserView ) 
         {
             // pass the viewComponent to the superclass where 
             // it will be stored in the inherited viewComponent property
             super( NAME, viewComponent );
-			
-			splashScreen.addEventListener(SplashScreen.EFFECT_END, this.endEffect);
+			viewComponent.addEventListener(NewsView.GO_BACK, this.navigateBack);
         }
+		
+		
 
         /**
          * List all notifications this Mediator is interested in.
@@ -45,10 +48,7 @@ package view
         override public function listNotificationInterests():Array 
         {
             return [ 
-					StartupMonitorProxy.LOADING_STEP,
-					StartupMonitorProxy.LOADING_COMPLETE,
-					ConfigProxy.LOAD_FAILED,
-					LocaleProxy.LOAD_FAILED
+					ApplicationFacade.VIEW_BROWSER
 					];
         }
 
@@ -63,28 +63,22 @@ package view
          */
         override public function handleNotification( note:INotification ):void 
         {
+			Console.log("note.getName():"+note.getName(), this);
             switch ( note.getName() ) 
 			{
-				case StartupMonitorProxy.LOADING_STEP:
-					// update the progress barr
-					this.splashScreen.pb.setProgress( note.getBody() as int, 100);
-					break;
-					
-				case StartupMonitorProxy.LOADING_COMPLETE:
-					// all done
-					// show the main screen
-					this.sendNotification( ApplicationFacade.VIEW_VIDEO );
-					break;
-					
-				case ConfigProxy.LOAD_FAILED:
-				case LocaleProxy.LOAD_FAILED:
-					// error reading the config XML fille
-					// show the error
-					this.splashScreen.errorText.text = note.getBody() as String;
-					this.splashScreen.errorBox.visible = true;
+				case ApplicationFacade.VIEW_BROWSER:
+					//newsProxy.load();
+					this.viewComponent.open( note.getBody().url );
 					break;
             }
         }
+		
+		
+		protected function navigateBack( e:Event ):void
+		{
+			Console.log("navigateBack", this);
+			this.sendNotification( ApplicationFacade.BACK );
+		}
 
         /**
          * Cast the viewComponent to its actual type.

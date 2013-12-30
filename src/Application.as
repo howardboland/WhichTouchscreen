@@ -3,6 +3,7 @@
     import caurina.transitions.*;
     
     import com.markuslerner.util.*;
+    import com.which.template.events.TemplateEvent;
     import com.which.utils.*;
     
     import flash.display.*;
@@ -274,6 +275,12 @@
             renderer.renderScene(scene, camera, viewport);
 			
         }
+		public function openURL( e:TemplateEvent ):void
+		{
+			Console.log("openURL:"+e, this);
+			this.dispatchEvent( new TemplateEvent(e.type, e.url) );
+			
+		}
 
         public function setNextPreviousArrows(bool:Boolean) : void
         {

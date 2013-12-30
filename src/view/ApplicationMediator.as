@@ -5,10 +5,13 @@
 */
 package view
 {
+    import com.which.utils.Console;
+    
+    import model.*;
+    
     import org.puremvc.as3.interfaces.*;
     import org.puremvc.as3.patterns.mediator.Mediator;
-	 
-    import model.*;
+    
     import view.components.*;
     
     /**
@@ -38,8 +41,15 @@ package view
         
 		// available values for the main viewstack
 		// defined as contants to help uncover errors at compile time instead of run time
-		public static const SPLASH_SCREEN : Number 	=	1;
-		public static const MAIN_SCREEN : Number 	=	2;
+		public static const SPLASH_SCREEN : Number 		=	1;
+		public static const VIDEO_SCREEN : Number 		=	2;
+		public static const NEWS_SCREEN : Number 		=	3;
+		public static const BROWSER_SCREEN : Number 	=	4;
+		public static const PORTFOLIO_SCREEN : Number 	=	5;
+		
+		public static const MAIN_SCREEN : Number 		=	6;
+		
+		protected var history:Array = [];
         
         /**
          * Constructor. 
@@ -67,6 +77,10 @@ package view
             // Create and register Mediators
             // components that were instantiated by the mxml application 
 			facade.registerMediator( new SplashScreenMediator( app.splashScreen ) );
+			facade.registerMediator( new VideoMediator( app.videoScreen ) );
+			facade.registerMediator( new NewsMediator( app.newsScreen ) );
+			facade.registerMediator( new BrowserMediator( app.browserScreen ) );
+			facade.registerMediator( new PortfolioMediator( app.portfolioScreen ) );
 			facade.registerMediator( new MainScreenMediator( app.mainScreen ) );
         }
 
@@ -82,7 +96,13 @@ package view
         {
             return [
 						ApplicationFacade.VIEW_SPLASH_SCREEN,
-						ApplicationFacade.VIEW_MAIN_SCREEN
+						ApplicationFacade.VIEW_VIDEO,
+						ApplicationFacade.VIEW_NEWS,
+						ApplicationFacade.VIEW_BROWSER,
+						ApplicationFacade.VIEW_PORTFOLIO,
+						ApplicationFacade.VIEW_MAIN_SCREEN,
+						ApplicationFacade.BACK
+						
 					];
         }
 
@@ -97,16 +117,43 @@ package view
          */
         override public function handleNotification( note:INotification ):void 
         {
+			
             switch ( note.getName() ) 
 			{
 				case ApplicationFacade.VIEW_SPLASH_SCREEN:
 					app.vwStack.selectedIndex = SPLASH_SCREEN;
 					break;
-
+				case ApplicationFacade.VIEW_VIDEO:
+					app.vwStack.selectedIndex = VIDEO_SCREEN;
+					break;
+				case ApplicationFacade.VIEW_NEWS:
+					app.vwStack.selectedIndex = NEWS_SCREEN;
+					break;
+				case ApplicationFacade.VIEW_BROWSER:
+					app.vwStack.selectedIndex = BROWSER_SCREEN;
+					break;
+				case ApplicationFacade.VIEW_PORTFOLIO:
+					app.vwStack.selectedIndex = PORTFOLIO_SCREEN;
+					break;
 				case ApplicationFacade.VIEW_MAIN_SCREEN:
 					app.vwStack.selectedIndex = MAIN_SCREEN;
 					break;
+				case ApplicationFacade.BACK:
+					var historyPoint:String = history[history.length-2]; // get history point
+					history = []; //reset history;
+					Console.log("BACK CALLED "+history, this);
+					this.sendNotification( historyPoint );
+					
+					break;
             }
+			if (note.getName()==ApplicationFacade.VIEW_SPLASH_SCREEN || 
+				note.getName()==ApplicationFacade.VIEW_VIDEO || 
+				note.getName()==ApplicationFacade.VIEW_NEWS || 
+				note.getName()==ApplicationFacade.VIEW_BROWSER || 
+				note.getName()==ApplicationFacade.VIEW_PORTFOLIO || 
+				note.getName()==ApplicationFacade.VIEW_MAIN_SCREEN)
+				history.push(note.getName());
+		
         }
 
         /**

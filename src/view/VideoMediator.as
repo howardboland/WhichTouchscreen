@@ -5,6 +5,8 @@
 */
 package view
 {
+	import com.which.utils.Console;
+	
 	import flash.events.Event;
 	
 	import model.*;
@@ -17,21 +19,21 @@ package view
     /**
      * A Mediator for interacting with the SplashScreen component.
      */
-    public class SplashScreenMediator extends Mediator implements IMediator
+    public class VideoMediator extends Mediator implements IMediator
     {
         // Cannonical name of the Mediator
-        public static const NAME:String = "SplashScreenMediator";
+        public static const NAME:String = "VideoMediator";
         
         /**
          * Constructor. 
          */
-        public function SplashScreenMediator( viewComponent:SplashScreen ) 
+        public function VideoMediator( viewComponent:VideoView ) 
         {
             // pass the viewComponent to the superclass where 
             // it will be stored in the inherited viewComponent property
             super( NAME, viewComponent );
 			
-			splashScreen.addEventListener(SplashScreen.EFFECT_END, this.endEffect);
+			viewComponent.addEventListener(VideoView.VIDEO_LOOPED, this.videoLoop);
         }
 
         /**
@@ -48,7 +50,8 @@ package view
 					StartupMonitorProxy.LOADING_STEP,
 					StartupMonitorProxy.LOADING_COMPLETE,
 					ConfigProxy.LOAD_FAILED,
-					LocaleProxy.LOAD_FAILED
+					LocaleProxy.LOAD_FAILED,
+					ApplicationFacade.VIEW_VIDEO
 					];
         }
 
@@ -65,26 +68,35 @@ package view
         {
             switch ( note.getName() ) 
 			{
+				case ApplicationFacade.VIEW_VIDEO:
+					viewComponent.onInit();
+					break;
+
 				case StartupMonitorProxy.LOADING_STEP:
 					// update the progress barr
-					this.splashScreen.pb.setProgress( note.getBody() as int, 100);
+					//this.splashScreen.pb.setProgress( note.getBody() as int, 100);
 					break;
 					
 				case StartupMonitorProxy.LOADING_COMPLETE:
 					// all done
 					// show the main screen
-					this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+					//this.sendNotification( ApplicationFacade.VIEW_VIDEO );
 					break;
 					
 				case ConfigProxy.LOAD_FAILED:
 				case LocaleProxy.LOAD_FAILED:
 					// error reading the config XML fille
 					// show the error
-					this.splashScreen.errorText.text = note.getBody() as String;
-					this.splashScreen.errorBox.visible = true;
+					//this.splashScreen.errorText.text = note.getBody() as String;
+					//this.splashScreen.errorBox.visible = true;
 					break;
             }
         }
+		protected function videoLoop( e:Event ):void
+		{
+			Console.log("Video looped", this);
+			this.sendNotification( ApplicationFacade.VIEW_NEWS );
+		}
 
         /**
          * Cast the viewComponent to its actual type.

@@ -39,8 +39,15 @@ package
 		// command
         public static const COMMAND_STARTUP_MONITOR:String	= "StartupMonitorCommand";
 		
-		// view
+		// view - for navigation purposes
+		public static const BACK:String						= "BACK";
+		
 		public static const VIEW_SPLASH_SCREEN:String		= "viewSplashScreen";
+		public static const VIEW_PORTFOLIO:String			= "viewPortfolioView";
+		public static const VIEW_NEWS:String				= "viewNewsView";
+		public static const VIEW_VIDEO:String				= "viewVideoView";
+		public static const VIEW_BROWSER:String				= "viewBrowserView";
+		
 		public static const VIEW_MAIN_SCREEN:String			= "viewMainScreen";
 		
 

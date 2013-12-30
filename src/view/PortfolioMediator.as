@@ -17,21 +17,21 @@ package view
     /**
      * A Mediator for interacting with the SplashScreen component.
      */
-    public class SplashScreenMediator extends Mediator implements IMediator
+    public class PortfolioMediator extends Mediator implements IMediator
     {
         // Cannonical name of the Mediator
-        public static const NAME:String = "SplashScreenMediator";
+        public static const NAME:String = "PortfolioMediator";
         
         /**
          * Constructor. 
          */
-        public function SplashScreenMediator( viewComponent:SplashScreen ) 
+        public function PortfolioMediator( viewComponent:PortfolioView ) 
         {
             // pass the viewComponent to the superclass where 
             // it will be stored in the inherited viewComponent property
             super( NAME, viewComponent );
 			
-			splashScreen.addEventListener(SplashScreen.EFFECT_END, this.endEffect);
+			viewComponent.addEventListener(PortfolioView.GO_WEBSITE, navigateWebsite);
         }
 
         /**
@@ -67,24 +67,29 @@ package view
 			{
 				case StartupMonitorProxy.LOADING_STEP:
 					// update the progress barr
-					this.splashScreen.pb.setProgress( note.getBody() as int, 100);
+				//	this.splashScreen.pb.setProgress( note.getBody() as int, 100);
 					break;
 					
 				case StartupMonitorProxy.LOADING_COMPLETE:
 					// all done
 					// show the main screen
-					this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+				//	this.sendNotification( ApplicationFacade.VIEW_MAIN_SCREEN );
 					break;
 					
 				case ConfigProxy.LOAD_FAILED:
 				case LocaleProxy.LOAD_FAILED:
 					// error reading the config XML fille
 					// show the error
-					this.splashScreen.errorText.text = note.getBody() as String;
-					this.splashScreen.errorBox.visible = true;
+					//this.splashScreen.errorText.text = note.getBody() as String;
+					//this.splashScreen.errorBox.visible = true;
 					break;
             }
         }
+		
+		protected function navigateWebsite( e:Event ):void
+		{
+			this.sendNotification( ApplicationFacade.VIEW_BROWSER, {url : this.viewComponent.url} );
+		}
 
         /**
          * Cast the viewComponent to its actual type.
@@ -104,21 +109,6 @@ package view
          * 
          * @return SplashScreen the viewComponent cast to org.puremvc.as3.demos.flex.appskeleton.view.components.SplashScreen
          */
-		 
-        protected function get splashScreen():SplashScreen
-		{
-            return viewComponent as SplashScreen;
-        }
-		
-		/**
-         * End effect event
-         */
-		private function endEffect(event:Event=null):void
-		{
-			// start to load the resources
-			var startupMonitorProxy:StartupMonitorProxy = facade.retrieveProxy( StartupMonitorProxy.NAME ) as StartupMonitorProxy;
-			startupMonitorProxy.loadResources();
-		}
 		
     }
 }

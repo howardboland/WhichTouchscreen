@@ -5,16 +5,32 @@
 							creationComplete="onCreate(event)">
 	<fx:Script>
 		<![CDATA[
+			import com.which.template.events.TemplateEvent;
 			import com.which.utils.Console;
 			
 			import mx.events.FlexEvent;
 			
+			public static var GO_WEBSITE:String 	= "GO_WEBSITE";
+			protected var application:Application;
+			public var url:String;
 			protected function onCreate(event:FlexEvent):void
 			{
 				// TODO Auto-generated method stub
 				Console.log("Application starting", this);
-				this.addChild( new Application() )
+				if (application==null)
+				{
+					application = new Application();
+					this.addChild( application );
+					application.addEventListener( TemplateEvent.OPEN_URL, this.openURL );
+					
+				}
 				
+			}
+			protected function openURL( e:TemplateEvent ):void
+			{
+				Console.log("openURL:", this);
+				url = e.url;
+				this.dispatchEvent( new Event( GO_WEBSITE )); 
 			}
 			
 		]]>

@@ -5,6 +5,8 @@
 */
 package view
 {
+	import com.which.utils.Console;
+	
 	import flash.events.Event;
 	
 	import model.*;
@@ -17,22 +19,28 @@ package view
     /**
      * A Mediator for interacting with the SplashScreen component.
      */
-    public class SplashScreenMediator extends Mediator implements IMediator
+    public class NewsMediator extends Mediator implements IMediator
     {
         // Cannonical name of the Mediator
-        public static const NAME:String = "SplashScreenMediator";
+        public static const NAME:String = "NewsMediator";
         
         /**
          * Constructor. 
          */
-        public function SplashScreenMediator( viewComponent:SplashScreen ) 
+        public function NewsMediator( viewComponent:NewsView ) 
         {
             // pass the viewComponent to the superclass where 
             // it will be stored in the inherited viewComponent property
             super( NAME, viewComponent );
 			
-			splashScreen.addEventListener(SplashScreen.EFFECT_END, this.endEffect);
+			viewComponent.addEventListener(NewsView.GO_BACK, this.navigateBack);
+			viewComponent.addEventListener(NewsView.GO_PORTFOLIO, this.navigatePortfolio);
+			viewComponent.addEventListener(NewsView.GO_WEBSITE, this.navigateWebsite);
+			viewComponent.addEventListener(NewsView.PREVIOUS_ITEM, this.previousNews);
+			viewComponent.addEventListener(NewsView.NEXT_ITEM, this.nextNews);
         }
+		
+		
 
         /**
          * List all notifications this Mediator is interested in.
@@ -45,10 +53,9 @@ package view
         override public function listNotificationInterests():Array 
         {
             return [ 
-					StartupMonitorProxy.LOADING_STEP,
-					StartupMonitorProxy.LOADING_COMPLETE,
-					ConfigProxy.LOAD_FAILED,
-					LocaleProxy.LOAD_FAILED
+					NewsProxy.LOAD_FAILED,
+					NewsProxy.LOAD_SUCCESSFUL,
+					ApplicationFacade.VIEW_NEWS
 					];
         }
 
@@ -63,28 +70,59 @@ package view
          */
         override public function handleNotification( note:INotification ):void 
         {
+			Console.log("note.getName():"+note.getName(), this);
             switch ( note.getName() ) 
 			{
-				case StartupMonitorProxy.LOADING_STEP:
-					// update the progress barr
-					this.splashScreen.pb.setProgress( note.getBody() as int, 100);
-					break;
+				case ApplicationFacade.VIEW_NEWS:
+					//viewComponent.onInit();
 					
-				case StartupMonitorProxy.LOADING_COMPLETE:
-					// all done
-					// show the main screen
-					this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+					newsProxy.load();
 					break;
-					
-				case ConfigProxy.LOAD_FAILED:
-				case LocaleProxy.LOAD_FAILED:
-					// error reading the config XML fille
-					// show the error
-					this.splashScreen.errorText.text = note.getBody() as String;
-					this.splashScreen.errorBox.visible = true;
+				case NewsProxy.LOAD_FAILED:
+					Console.log("NewsProxy.LOAD_FAILED", this);
+					break;
+				case NewsProxy.LOAD_SUCCESSFUL:
+					Console.log("NewsProxy.LOAD_SUCCESSFUL", this);
+						nextNews();
 					break;
             }
         }
+		
+		protected function get newsProxy():NewsProxy
+		{
+			return NewsProxy(facade.retrieveProxy( NewsProxy.NAME ));
+		}
+		
+		protected function navigateBack( e:Event ):void
+		{
+			Console.log("navigateBack", this);
+			this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+		}
+		protected function navigatePortfolio( e:Event ):void
+		{
+			Console.log( "Go to portfolio", this);
+			this.sendNotification( ApplicationFacade.VIEW_PORTFOLIO );
+		}
+		protected function navigateWebsite( e:Event ):void
+		{
+			this.sendNotification( ApplicationFacade.VIEW_BROWSER, {url : this.viewComponent.url} );
+		}
+		protected function previousNews( e:Event=null ):void
+		{
+			//speak to model
+			if (!newsProxy.hasData())
+				this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+			else
+				this.viewComponent.populate( newsProxy.previousItem() )
+		}
+		protected function nextNews( e:Event=null ):void
+		{
+			//speak to model
+			if (!newsProxy.hasData())
+				this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+			else
+				this.viewComponent.populate( newsProxy.nextItem() )
+		}
 
         /**
          * Cast the viewComponent to its actual type.
@@ -104,21 +142,7 @@ package view
          * 
          * @return SplashScreen the viewComponent cast to org.puremvc.as3.demos.flex.appskeleton.view.components.SplashScreen
          */
-		 
-        protected function get splashScreen():SplashScreen
-		{
-            return viewComponent as SplashScreen;
-        }
-		
-		/**
-         * End effect event
-         */
-		private function endEffect(event:Event=null):void
-		{
-			// start to load the resources
-			var startupMonitorProxy:StartupMonitorProxy = facade.retrieveProxy( StartupMonitorProxy.NAME ) as StartupMonitorProxy;
-			startupMonitorProxy.loadResources();
-		}
+	
 		
     }
 }

@@ -22,6 +22,7 @@ package controller
             facade.registerProxy(new StartupMonitorProxy());
             facade.registerProxy(new ConfigProxy());
             facade.registerProxy(new LocaleProxy());
+			facade.registerProxy(new NewsProxy());
         }
     }
 }
