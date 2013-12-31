@@ -383,7 +383,7 @@
 				
 			}
 			
-			Console.log("isLoaded :"+ loadingDone +" && "+displayobject.container+" && "+(!main.isMoving), this);
+			//Console.log("isLoaded :"+ loadingDone +" && "+displayobject.container+" && "+(!main.isMoving), this);
 			if (loadingDone && displayobject.container && !main.isMoving)
 			{
 				loadedIndex = parent.loadingIndex + 1;
@@ -402,7 +402,7 @@
         override public function setAnimationAppear(delay:Number = 0) : Number
         {
 			var theExecutionDelay:Number = delay;
-            Console.log("setAnimationAppear isLoaderInited:" + isLoaderInited, this);
+            //Console.log("setAnimationAppear isLoaderInited:" + isLoaderInited, this);
             var myDelay:Number = SHOW_DELAY + theExecutionDelay;
             Tweener.addTween(border, {delay:myDelay, time:SHOW_INTERVAL, transition:"easeInOutQuad", onStart:function () : void
             {
@@ -468,7 +468,7 @@
 					}
 				}
 				startTime = getTimer();
-				main.addEventListener("enterFrame", loadingHandler);
+				main.addEventListener( Event.ENTER_FRAME, loadingHandler);
 			}
 			if (loading)
 			{

@@ -167,11 +167,12 @@
 
 		private function placeImage(event:Event) : void
 		{
-			highresolution.x = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
+			//highresolution.x = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
 			highresolution.y = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
 			//Console.log("placeimage x" + 330 * Application.scale + " main.container3D.x" + main.container3D.x + "- highresolution.x" + highresolution.x, this);
 			var w:Number = 1280/2;
 			var h:Number = 720/2;
+			Console.log("Application scale:"+Application.scale, this);
 			if (width > height)
 			{
 				highresolution.width = w * Application.scale + main.container3D.x - highresolution.x;
@@ -200,7 +201,6 @@
                 Tweener.addTween(this, {time:0.7, delay:myDelay, onComplete:function () : void
 	            {
 	                setHighResolution(true);
-	                return;
 	            }});
                 main.setAnimationZoomIn(displayobject, myDelay, 1);
             }
@@ -212,7 +212,6 @@
                 Tweener.addTween(this, {time:0.7, onComplete:function () : void
 	            {
 	                setHighResolution(true);
-	                return;
 	            }});
                 main.setAnimationZoomIn(displayobject, 0, 1);
             }
@@ -297,7 +296,7 @@
 				}
 				return false;
 			} else {
-				Console.log("objectbreak 3 highresolutionPage && highresolutionText "+ highresolutionPage+" && "+highresolutionText, this)
+				//Console.log("objectbreak 3 highresolutionPage && highresolutionText "+ highresolutionPage+" && "+highresolutionText, this)
 			}
 			
 			return false;
@@ -436,9 +435,11 @@
             }
             else
             {
+				
                 main.container2D.addChild(highresolution);
                 main.setBackgroundOverlay(true);
                 main.setNextPreviousArrows(true);
+				
                 main.stage.addEventListener("resize", placeImage);
                 placeImage(null);
             }

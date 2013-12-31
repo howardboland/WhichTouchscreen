@@ -232,7 +232,11 @@
             model2 = new Collada("resources/core/box2.dae", materiallist, 0.1);
             initPopups();
             initVideo();
+			
+			
+			
             loading = new Plane(material_loading, 114, 114);
+			
             scene.addChild(loading);
 			
 			
@@ -260,13 +264,18 @@
             addChild(viewport);
 			
 			
+			shapeBackground = new Sprite();
+			shapeBackground.graphics.beginFill(0x000000, 0.8);
+			shapeBackground.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
+			shapeBackground.graphics.endFill();
+			shapeBackground.mouseEnabled = false;
+			shapeBackground.mouseChildren = false;
+			addChild(shapeBackground);
 			
-            shapeBackground = new Sprite();
-            shapeBackground.graphics.beginFill(0x000000, 0.8);
-            shapeBackground.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
-            shapeBackground.graphics.endFill();
-            addChild(shapeBackground);
+			
+			
             this.setBackgroundOverlay(false);
+			
             addChild(container2D);
             stage.addEventListener( Event.RESIZE, resizeHandler);
             resizeHandler(null);
@@ -800,7 +809,13 @@
         public function setBackgroundOverlay(show:Boolean) : void
         {
             Console.log("setBackgroundOverlay " + show, this);
+			shapeBackground.alpha = 0;
             shapeBackground.visible = show;
+			if (shapeBackground.visible)
+			{
+				Tweener.addTween(shapeBackground, {alpha:1, time: .5, transition:"easeinoutquad"});
+				
+			}
         }
 
 		private function createComponent(childindex:Array, component:Component3D, id:Number):Component3D
@@ -994,6 +1009,7 @@
 					imageShadow.y = offsetY + container3D.y - imageShadow.height / 2 + 15 * scaleFactor;
 					container2D.addChild(imageShadow);
 					container2D.addChild(popup_component);
+					
 				}
 				else 
 				{
@@ -1015,6 +1031,7 @@
 								popup_component = planePlay;
 								break;
 						}
+						
 						popup_component.x = component.x;
 						popup_component.y = component.y;
 						popup_component.z = component.z - 25;
@@ -1027,6 +1044,7 @@
 						scene.addChild(planeShadow);
 						popup_component.container.mouseEnabled = false;
 						planeShadow.container.mouseEnabled = false;
+					
 					}
 				}
 				popupCurrent = popup_type;
@@ -1103,14 +1121,15 @@
             }
         }
 
-		private function resizeHandler(e:Event) : void
+		public function resizeHandler(e:Event=null) : void
 		{
 			
-			scale = stage.stageHeight / 720;
+			//scale = stage.stageHeight / 720;
 			var w:Number = 1280;
 			var h:Number = 720;
-			var scaleFactor:Number = Math.max(this.stage.stageWidth / w, this.stage.stageHeight / h);
-			Console.log("scale:" + scale, this);
+			var scaleFactor:Number = Math.min(this.stage.stageWidth / w, this.stage.stageHeight / h);
+			scale = scaleFactor
+			Console.log("scale:" + scale+" "+scaleFactor, this);
 			container3D.resize(scale);
 			//TODO:: Review scaling in fullscreen
 			image_background.scaleY = scaleFactor;

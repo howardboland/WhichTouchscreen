@@ -48,6 +48,7 @@
             loading = new Sprite();
             var loadermc:LoaderMC = new LoaderMC();
             loading.addChild(loadermc);
+			
         }
 
         private function hidePopup() : void
@@ -107,6 +108,7 @@
                 {
                     main.stage.removeEventListener("resize", resize);
                     main.container2D.removeChild(image);
+					main.setBackgroundOverlay(false);
                     main.setNextPreviousArrows(false);
                 }
             }
@@ -117,18 +119,24 @@
                     image = new Image(url_highresolution, true);
                 }
                 main.container2D.addChild(image);
-                main.stage.addEventListener("resize", resize);
+               
+				main.setBackgroundOverlay(true);
                 main.setNextPreviousArrows(true);
                 setMouseEnabled(false);
+				main.stage.addEventListener("resize", resize);
+
                 resize();
+				
             }
             return;
         }
 
         private function enterFrameHandler(e:Event) : void
         {
+		
             if (getTimer() - startTime > 1000 && popupVisible)
             {
+				Console.log("enterFrameHandler: "+popupVisible, this);
                 popupVisible = false;
                 hidePopup();
             }
@@ -174,7 +182,7 @@
                     loading.x = main.container3D.x + displayobject.screen.x;
                     loading.y = main.container3D.y + displayobject.screen.y;
                     main.container2D.addChild(loading);
-                    main.addEventListener("enterFrame", loadingHandler);
+                    main.addEventListener( Event.ENTER_FRAME, loadingHandler);
                 }
                 return;
             }
@@ -185,10 +193,10 @@
 
 		private function resize(e:Event = null) : void
 		{
-			var left:Number = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
-			var top:Number = (displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
-			var right:Number = (displayobject.geometry.vertices[2] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
-			var bottom:Number = (displayobject.geometry.vertices[2] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
+			var left:Number		= 	(displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
+			var top:Number 		= 	(displayobject.geometry.vertices[1] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
+			var right:Number	= 	(displayobject.geometry.vertices[2] as Vertex3D).vertex3DInstance.x * Application.scale + main.container3D.x;
+			var bottom:Number 	= 	(displayobject.geometry.vertices[2] as Vertex3D).vertex3DInstance.y * Application.scale + main.container3D.y;
 			image.x = left;
 			image.y = top;
 			image.width = right - left;
@@ -204,6 +212,7 @@
 			} else {
 					if (main.isZoomed)
 					{
+						
 						main.setPopupVisible(Application.POPUP_2D_ZOOM_IN, displayobject);
 					}
 					else 
@@ -222,7 +231,6 @@
                     displayobject = new Plane(new BitmapMaterial(materialImage.bitmap.bitmapData), width, height);
                     displayobject.material.smooth = true;
                     hasLoaded = true;
-                    ;
                 }
             }
             return hasLoaded;
@@ -248,6 +256,7 @@
 
         public function mouseMoveHandler(event:MouseEvent) : void
         {
+			Console.log("mouseMove", this);
             if (isOpen)
             {
                 main.setPopupVisible(1);
@@ -269,6 +278,7 @@
                 setMouseEnabled(true);
                 if (displayobject.container)
                 {
+					//displayobject.container.stage.addEventListener( MouseEvent.MOUSE_MOVE, mouseMoveHandler);
                     displayobject.container.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
                 }
                 startPopupTimeout();
@@ -282,6 +292,7 @@
             var myDelay:* = SHOW_DELAY + theExecutionDelay;
             main.scene.addChild(displayobject);
             displayobject.visible = false;
+			
             Tweener.addTween(displayobject, {delay:myDelay, time:SHOW_INTERVAL, transition:"easeinoutquad", onStart:function () : void
             {
                 displayobject.visible = true;
