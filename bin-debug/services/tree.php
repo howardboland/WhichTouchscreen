@@ -16,7 +16,7 @@ function recurse($id, $xPosParent)
 {
     global $database_localhost, $localhost;
     mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("SELECT assets.id, assets.pid, assets.name, assets.source, assets.contentid, asset_types.name as typename FROM assets inner join asset_types ON assets.typeid=asset_types.id  where public=1 and assets.pid = %s", GetSQLValueString($id, "int"));      
+	$query = sprintf("SELECT assets.id, assets.pid, assets.name, assets.source, assets.contentid, asset_types.name as typename FROM assets inner join asset_types ON assets.typeid=asset_types.id  where public=1 and assets.pid = %s  order by orderid", GetSQLValueString($id, "int"));      
 	$result = mysql_query($query, $localhost) or die(mysql_error());
 	
 	$counter = 0;
@@ -40,7 +40,7 @@ function buildTree()
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = "SELECT assets.id, assets.pid, assets.name, assets.source, asset_types.name as typename FROM assets inner join asset_types ON assets.typeid=asset_types.id  where assets.pid is null and public=1";
+	$query = "SELECT assets.id, assets.pid, assets.name, assets.source, asset_types.name as typename FROM assets inner join asset_types ON assets.typeid=asset_types.id  where assets.pid is null and public=1 order by orderid";
 	
 	$result = mysql_query($query, $localhost) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
