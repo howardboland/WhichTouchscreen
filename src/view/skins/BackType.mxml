@@ -102,8 +102,7 @@
 	</s:Path>
     <!-- layer 8: text -->
     <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay  -->
-    <s:Label id="labelDisplay" left="25" right="0" top="2" bottom="2" fontFamily="Stag Sans Book"
-			 fontSize="14" maxDisplayedLines="1" textAlign="left" verticalAlign="middle"
+    <s:Label id="labelDisplay" left="25" right="0" top="2" bottom="2"  maxDisplayedLines="1" textAlign="left" verticalAlign="middle"
 			 verticalCenter="1">
     </s:Label>
     

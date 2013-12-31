@@ -129,7 +129,7 @@
 		</s:Group>
 	</s:Group>
 	
-	<s:Label  id="labelDisplay" left="21.4287" top="15" right="64.0287" bottom="10"  textAlign="left" fontFamily="Stag Sans Medium" fontSize="13.832" kerning="on" lineHeight="20.748" color="#FFFFFF" >
+	<s:Label  id="labelDisplay" left="21.4287" top="15" right="64.0287" bottom="10"  textAlign="left"  kerning="on" lineHeight="20.748"  >
 	</s:Label>
     
 	<s:Rect top="0" bottom="0" alpha="0" alpha.over=".2" left="0" right="0" radiusX="1.73" radiusY="1.73" id="highlight">

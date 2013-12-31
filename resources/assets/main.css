@@ -3,6 +3,8 @@
  Copyright (c) 2007 Daniele Ugoletti <daniele.ugoletti@puremvc.org>
  Your reuse is governed by the Creative Commons Attribution 3.0 License
 */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
 
 .global
 {
@@ -13,15 +15,37 @@
     rollOverColor:          #D6E6EE;
     selectionColor:         #B8D5E4;
 }
-
-Application
-{
-	backgroundGradientColors: #3E4B8B, #252D52;
+s|Label {
+	fontFamily: "Standard-Regular";
 }
-
 .error
 {
     fontWeight:         "bold";
     fontSize:           11;
 	color:				#990000;
+}
+
+.newsBody {
+	fontFamily: "Standard-Light";
+	color: #738087;
+	fontSize: 36;
+}
+.newsTitle {
+	fontFamily: "Standard-Light";
+	color: #F3362F;
+	fontSize: 36; 
+}
+.newsHeader {
+	fontFamily: "Standard-Regular";
+	fontSize: 14;
+	color: #000000;
+}
+#btnWeb s|Label, #btnPortfolio s|Label {
+	fontFamily: "Standard-Regular"; 
+	fontSize: 14;
+	color: #FFFFFF;
+}
+#btnBack s|Label {
+	fontFamily: "Standard-Regular";
+	fontSize: 14;
 }

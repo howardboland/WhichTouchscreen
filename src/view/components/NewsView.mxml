@@ -178,18 +178,18 @@
 	<s:Image width="78" height="50" smooth="true" smoothingQuality="high" y="45" x="1120" source="@Embed(source='resources/images/which-logo.png')" />
 	
 	<s:VGroup x="100" y="125" width="946.771">
-		<s:RichText id="headerText" fontFamily="Stag Sans Book" fontSize="14"  kerning="on" color="#000000" 
+		<s:RichText id="headerText" styleName="newsHeader"  kerning="on" 
 					 whiteSpaceCollapse="preserve"  
 					 showEffect="{slideInEffect}" hideEffect="{fadeOut}">
 			<s:content><s:span>{header}</s:span></s:content>
 		</s:RichText>
 		
-		<s:RichText id="titleText" fontFamily="Stag Sans Light" fontSize="36" paddingBottom="30"  kerning="on" color="#F3362F" whiteSpaceCollapse="preserve" >
+		<s:RichText id="titleText" styleName="newsTitle" paddingBottom="30"  kerning="on" whiteSpaceCollapse="preserve" >
 			<s:content><s:span>{title}</s:span></s:content>
 		</s:RichText>
 		
 		
-		<s:RichText  id="bodyText" columnCount="1" textAlign="left" tabStops="S36 S72 S108 S144 S180 S216 S252 S288 S324 S360 S396 S432 S468 S504 S540 S576 S612 S648 S684 S720 S756 S792 S828 S864 S900 S936" fontFamily="Stag Sans Light" fontSize="36" kerning="on" color="#738087" whiteSpaceCollapse="preserve" width="100%">
+		<s:RichText styleName="newsBody" id="bodyText" columnCount="1" textAlign="left" tabStops="S36 S72 S108 S144 S180 S216 S252 S288 S324 S360 S396 S432 S468 S504 S540 S576 S612 S648 S684 S720 S756 S792 S828 S864 S900 S936" kerning="on"  whiteSpaceCollapse="preserve" width="100%">
 			<s:content><s:span>{body}</s:span></s:content>
 		</s:RichText>
 	</s:VGroup>

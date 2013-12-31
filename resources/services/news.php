@@ -1,4 +1,3 @@
-<?php ob_start(); ?>
 <?php require_once('Connections/localhost.php'); ?>
 <?php require_once('Connections/functions.php'); ?>
 <?php
@@ -35,7 +34,7 @@ function getPublic()
 	
 	$result = mysql_query($query, $localhost) or die(mysql_error());
 	
-	$news = [];
+	$news = array();
 	
 	while ($row = mysql_fetch_assoc($result)) 
 	{

@@ -17,7 +17,6 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="WhichTouchscreen.mxml"/>
     <application path="AppSkeleton.mxml"/>
   </applications>
   <modules/>
