@@ -34,6 +34,7 @@ package view
             super( NAME, viewComponent );
 			
 			viewComponent.addEventListener(NewsView.GO_BACK, this.navigateBack);
+			viewComponent.addEventListener(NewsView.AUTO, this.auto);
 			viewComponent.addEventListener(NewsView.GO_PORTFOLIO, this.navigatePortfolio);
 			viewComponent.addEventListener(NewsView.GO_WEBSITE, this.navigateWebsite);
 			viewComponent.addEventListener(NewsView.PREVIOUS_ITEM, this.previousNews);
@@ -92,7 +93,13 @@ package view
 		{
 			return NewsProxy(facade.retrieveProxy( NewsProxy.NAME ));
 		}
-		
+		protected function auto( e:Event ):void
+		{
+			if (newsProxy.isLast())
+				this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+			else
+				nextNews();
+		}
 		protected function navigateBack( e:Event ):void
 		{
 			Console.log("navigateBack", this);

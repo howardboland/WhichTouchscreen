@@ -32,7 +32,7 @@ package view
             // pass the viewComponent to the superclass where 
             // it will be stored in the inherited viewComponent property
             super( NAME, viewComponent );
-			
+			viewComponent.addEventListener(NewsView.GO_PORTFOLIO, this.navigatePortfolio);
 			viewComponent.addEventListener(VideoView.VIDEO_LOOPED, this.videoLoop);
         }
 
@@ -97,40 +97,13 @@ package view
 			Console.log("Video looped", this);
 			this.sendNotification( ApplicationFacade.VIEW_NEWS );
 		}
-
-        /**
-         * Cast the viewComponent to its actual type.
-         * 
-         * <P>
-         * This is a useful idiom for mediators. The
-         * PureMVC Mediator class defines a viewComponent
-         * property of type Object. </P>
-         * 
-         * <P>
-         * Here, we cast the generic viewComponent to 
-         * its actual type in a protected mode. This 
-         * retains encapsulation, while allowing the instance
-         * (and subclassed instance) access to a 
-         * strongly typed reference with a meaningful
-         * name.</P>
-         * 
-         * @return SplashScreen the viewComponent cast to org.puremvc.as3.demos.flex.appskeleton.view.components.SplashScreen
-         */
-		 
-        protected function get splashScreen():SplashScreen
-		{
-            return viewComponent as SplashScreen;
-        }
 		
-		/**
-         * End effect event
-         */
-		private function endEffect(event:Event=null):void
+		protected function navigatePortfolio( e:Event ):void
 		{
-			// start to load the resources
-			var startupMonitorProxy:StartupMonitorProxy = facade.retrieveProxy( StartupMonitorProxy.NAME ) as StartupMonitorProxy;
-			startupMonitorProxy.loadResources();
+			Console.log( "Go to portfolio", this);
+			this.sendNotification( ApplicationFacade.VIEW_PORTFOLIO );
 		}
+
 		
     }
 }

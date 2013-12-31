@@ -32,6 +32,7 @@ package view
             super( NAME, viewComponent );
 			
 			viewComponent.addEventListener(PortfolioView.GO_WEBSITE, navigateWebsite);
+			viewComponent.addEventListener(NewsView.AUTO, this.auto);
         }
 
         /**
@@ -48,7 +49,8 @@ package view
 					StartupMonitorProxy.LOADING_STEP,
 					StartupMonitorProxy.LOADING_COMPLETE,
 					ConfigProxy.LOAD_FAILED,
-					LocaleProxy.LOAD_FAILED
+					LocaleProxy.LOAD_FAILED,
+					ApplicationFacade.VIEW_PORTFOLIO
 					];
         }
 
@@ -65,23 +67,8 @@ package view
         {
             switch ( note.getName() ) 
 			{
-				case StartupMonitorProxy.LOADING_STEP:
-					// update the progress barr
-				//	this.splashScreen.pb.setProgress( note.getBody() as int, 100);
-					break;
-					
-				case StartupMonitorProxy.LOADING_COMPLETE:
-					// all done
-					// show the main screen
-				//	this.sendNotification( ApplicationFacade.VIEW_MAIN_SCREEN );
-					break;
-					
-				case ConfigProxy.LOAD_FAILED:
-				case LocaleProxy.LOAD_FAILED:
-					// error reading the config XML fille
-					// show the error
-					//this.splashScreen.errorText.text = note.getBody() as String;
-					//this.splashScreen.errorBox.visible = true;
+				case ApplicationFacade.VIEW_PORTFOLIO:
+					viewComponent.onInit();
 					break;
             }
         }
@@ -90,7 +77,10 @@ package view
 		{
 			this.sendNotification( ApplicationFacade.VIEW_BROWSER, {url : this.viewComponent.url} );
 		}
-
+		protected function auto( e:Event ):void
+		{
+				this.sendNotification( ApplicationFacade.VIEW_VIDEO );
+		}
         /**
          * Cast the viewComponent to its actual type.
          * 

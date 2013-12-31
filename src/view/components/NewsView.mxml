@@ -12,6 +12,7 @@
 			
 			import mx.effects.easing.Exponential;
 			
+			public static var AUTO:String 			= "AUTO";
 			public static var NEXT_ITEM:String 		= "NEXT_ITEM";
 			public static var PREVIOUS_ITEM:String 	= "PREVIOUS_ITEM";
 			public static var GO_BACK:String 		= "GO_BACK";
@@ -32,6 +33,9 @@
 			[Bindable]
 			public var url:String = "";
 			
+			protected var interactionTimer:Timer;
+			protected var interaction:Boolean = false;
+
 			public function populate( data:Object ):void
 			{
 				//for (var m in data)
@@ -43,11 +47,69 @@
 					title = data["title"]==null ? "" : data["title"];
 					body =  data["body"]==null ? "" : data["body"];
 					url =  data["url"]==null ? "" : data["url"];
-					
+					transitionIn();
+					detectStart();
 				}
-				transitionIn();
+				
+				
 				Console.log("header:"+header,this);
 				
+			}
+			
+			protected function detectStart():void
+			{
+				
+				detectStop();
+				resetDetected();
+				
+				stage.addEventListener( MouseEvent.MOUSE_MOVE, interactionDetected );
+				
+				
+				
+			}
+			protected function checkInteraction( e:Event ):void
+			{
+				if (!interaction)
+				{
+					detectStop();
+					exitEvent = AUTO;
+					this.transitionOut();
+				} else {
+					resetDetected();
+					
+				}
+				
+			}
+			protected function interactionDetected( e:Event ):void
+			{
+				
+				interaction = true;
+				
+			}
+			protected function resetDetected( e:Event=null ):void
+			{
+				
+				interaction = false;
+				if (interactionTimer!=null)
+				{
+					interactionTimer.stop();
+					interactionTimer.removeEventListener(TimerEvent.TIMER, checkInteraction);
+					interactionTimer = null;
+				}
+				interactionTimer = new Timer(12000);
+				interactionTimer.removeEventListener(TimerEvent.TIMER, checkInteraction);
+				interactionTimer.addEventListener(TimerEvent.TIMER, checkInteraction);
+				interactionTimer.start();
+			}
+			protected function detectStop( e:Event=null ):void
+			{
+				stage.removeEventListener( MouseEvent.MOUSE_MOVE, interactionDetected );
+				if (interactionTimer!=null)
+				{
+					interactionTimer.stop();
+					interactionTimer.removeEventListener(TimerEvent.TIMER, checkInteraction);
+					interactionTimer = null;
+				}
 			}
 			protected function onCreate( e:Event ):void
 			{
@@ -76,6 +138,7 @@
 					case this.btnPortfolio:
 						exitEvent = GO_PORTFOLIO;
 						transitionOutComplete();
+					
 					break;
 				}
 				
@@ -83,7 +146,7 @@
 			protected function transitionOut():void
 			{
 				Console.log("transitionOut",this);
-			
+				detectStop();
 				Tweener.addTween(bodyText, {delay:0, time:.5, alpha: 0, transition:"easeinoutquad"});
 				Tweener.addTween(titleText, {delay:0.1, time:.5, alpha: 0, transition:"easeinoutquad"});
 				Tweener.addTween(headerText, {delay:0.2, time:.5, alpha: 0, transition:"easeinoutquad", onComplete: this.transitionOutComplete});
@@ -97,6 +160,7 @@
 			}
 			protected function transitionOutComplete( e:Event=null ):void
 			{
+				detectStop();
 				Console.log("transitionOutComplete:"+this.exitEvent,this);
 				this.dispatchEvent( new Event( this.exitEvent ) );
 			}

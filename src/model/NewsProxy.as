@@ -46,6 +46,7 @@ package model
 		{
 			// create a worker who will go get some data
 			// pass it a reference to this proxy so the delegate knows where to return the data
+			index = -1;
 			var urlRequest:URLRequest = new URLRequest('services/news.php');
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, result);
@@ -113,7 +114,7 @@ package model
 		{
 			if (! hasData() )
 				return true;
-			if (index<this.data.length)
+			if (index+1<this.data.length)
 				return false;
 			return true;
 		}

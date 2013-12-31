@@ -81,12 +81,12 @@
 	<s:Group>
 		<s:Rect alpha="0" width="24" height="47">
 			<s:fill>
-				<s:SolidColor color="#6BBCEA" />
+				<s:SolidColor color="#FFFFFF" />
 			</s:fill>
 		</s:Rect>
 		<s:Path winding="nonZero" data="M18.2266 23.3301 0 5.13574 0 0.375977 0.439453 0 23.8613 23.3926 0.439453 46.8799 0 46.4404 0 41.4932 18.2266 23.3301Z">
 			<s:fill>
-				<s:SolidColor color="#6BBCEA" color.over="#000000"/>
+				<s:SolidColor color="#6BBCEA" color.over="#3C7797"/>
 			</s:fill>
 		</s:Path>
 	</s:Group>

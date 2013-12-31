@@ -5,26 +5,30 @@
 	<fx:Script>
 		<![CDATA[
 			import com.which.utils.Console;
+			
+			import org.osmf.events.LoadEvent;
+			import org.osmf.events.MediaPlayerStateChangeEvent;
+			
 			public static var VIDEO_LOOPED:String = "VIDEO_LOOPED";
+			public static var GO_PORTFOLIO:String 	= "GO_PORTFOLIO";
+			
+			
 			protected var timeoutLoops:int = 0;
 			protected var loopCounts:int = 0;
 			protected function onCreate( e:Event ):void
 			{
-				Console.log("onCreate", this);
-				
-				
+				Console.log("onCreate", this);	
 				
 			}
 			public function onInit( e:Event=null ):void
 			{
 				Console.log("onInit", this);
-				if (video!=null)
-				{
-					video.loop = true;
-					video.play();
-					video.removeEventListener( Event.COMPLETE, onComplete );
-					video.addEventListener( Event.COMPLETE, onComplete );
-				}	
+				
+					
+					startup();
+					
+					
+			
 			}
 			protected function onComplete( e:Event ):void
 			{
@@ -38,15 +42,57 @@
 				
 					
 					Console.log("onComplete pausing!", this);
-					video.loop = false;
-					video.pause();
-					//video.stop();
+					shutdown();
 					this.dispatchEvent( new Event( VIDEO_LOOPED ));
 					
-					loopCounts = 0;
+					
 			//	}
 				
 				
+			}
+			protected function startup():void
+			{
+				if (video!=null)
+				{
+					video.removeEventListener( Event.COMPLETE, onComplete );
+					video.addEventListener( Event.COMPLETE, onComplete );
+					video.loop = false;
+					video.autoRewind = false;
+					video.play();
+					stage.addEventListener( MouseEvent.MOUSE_MOVE, portfolio);
+				}
+				
+			}
+			protected function shutdown():void
+			{
+				if (video!=null)
+				{
+					stage.removeEventListener( MouseEvent.MOUSE_MOVE, portfolio);
+					video.removeEventListener( Event.COMPLETE, onComplete );
+					video.loop = false;
+					video.pause();
+					video.stop();
+					loopCounts = 0;
+					
+				}
+			}
+			protected function portfolio( e:Event=null ):void
+			{
+				shutdown();
+				this.dispatchEvent( new Event( GO_PORTFOLIO ) );
+			}
+			protected function createVideo( e:Event ):void
+			{
+				startup();
+			}
+			protected function onLoading( e:LoadEvent ):void
+			{
+				
+			}
+			
+			protected function stateChange(e:MediaPlayerStateChangeEvent):void {
+				
+				Console.log( e.state, this)
 			}
 		]]>
 	</fx:Script>
@@ -54,6 +100,8 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:VideoDisplay creationComplete="onInit(event)" autoRewind="false" id="video" loop="false" width="1280" height="720" scaleMode="none"  source="resources/video/sample.mp4">
+	<s:VideoDisplay creationComplete="createVideo(event)" mediaPlayerStateChange="stateChange(event)"  
+					bytesLoadedChange="onLoading(event)"  
+					horizontalCenter="0" verticalCenter="0" autoRewind="true" id="video" loop="true" width="1280" height="720" scaleMode="none"  source="resources/video/sample.mp4">
 	</s:VideoDisplay>
 </s:NavigatorContent>
