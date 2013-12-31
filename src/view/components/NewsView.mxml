@@ -38,6 +38,7 @@
 				//Console.log("data: "+m+" "+data[m], this)
 				if (data!=null)
 				{
+					stage.quality = "high";
 					header = data["header"]==null ? "" : data["header"];
 					title = data["title"]==null ? "" : data["title"];
 					body =  data["body"]==null ? "" : data["body"];
@@ -109,8 +110,8 @@
 	</fx:Declarations>
 
 	
-	<s:Button id="btnBack"  y="55" x="100" label="Back" click="click(event)" />	
-	<s:Image width="78" height="50" smooth="true" smoothingQuality="high" y="45" x="1165" source="@Embed(source='resources/images/which-logo.png')" />
+	<s:Button id="btnBack" skinClass="view.skins.BackType"  y="55" x="100" label="B A C K" click="click(event)" />	
+	<s:Image width="78" height="50" smooth="true" smoothingQuality="high" y="45" x="1120" source="@Embed(source='resources/images/which-logo.png')" />
 	
 	<s:VGroup x="100" y="125" width="946.771">
 		<s:RichText id="headerText" fontFamily="Stag Sans Book" fontSize="14"  kerning="on" color="#000000" 
@@ -131,7 +132,7 @@
 	
 	<s:Button id="btnNext" x="1225" y="335" skinClass="view.skins.ArrowButton" click="click(event)" />
 	<s:Button id="btnPrevious" x="50" y="382" skinClass="view.skins.ArrowButton" rotation="180" click="click(event)" />
-	<s:Button id="btnWeb" visible="{url!=''}" y="700" x="100" label="Visit Webpage" click="click(event)" />
-	<s:Button id="btnPortfolio"  y="700" x="950" label="Portfolio" click="click(event)" />	
+	<s:Button id="btnWeb" skinClass="view.skins.whichButton" visible="{url!=''}" y="650" x="100" label="Visit Webpage" click="click(event)" />
+	<s:Button id="btnPortfolio" skinClass="view.skins.whichButton" y="650" x="800" label="Portfolio" click="click(event)" />	
 	
 </s:NavigatorContent>

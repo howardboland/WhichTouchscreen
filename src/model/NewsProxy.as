@@ -89,7 +89,7 @@ package model
 		{
 			if (! hasData() )
 				return null;
-			if (index<this.data.length)
+			if (index+1<this.data.length)
 				index++;
 			else
 				index = 0;
@@ -130,52 +130,5 @@ package model
 			sendNotification( NewsProxy.LOAD_FAILED, NewsProxy.ERROR_LOAD_FILE );
 		}
 		
-		/**
-         * Get the config value
-		 * 
-         * @param key the key to read 
-         * @return String the key value stored in internal object
-         */
-		public function getValue(key:String):String
-		{
-			return data[key.toLowerCase()];
-		}
-		
-		/**
-         * Get the config numeric value 
-		 * 
-         * @param key the key to read 
-         * @return Number the key value stored in internal object
-         */
-		public function getNumber(key:String):Number
-		{
-			return Number( data[key.toLowerCase()] );
-		}
-		
-		/**
-         * Get the config boolean value 
-		 * 
-         * @param key the key to read 
-         * @return Boolean the key value stored in internal object
-         */
-		public function getBoolean(key:String):Boolean
-		{
-			return data[key.toLowerCase()] ? data[key.toLowerCase()].toLowerCase() == "true" : false;
-		}
-		
-		
-		/**
-         * Set the config value if isn't defined
-		 * 
-         * @param key the key to set
-         * @param value the value
-         */
-		public function setDefaultValue( key:String, value:Object ):void
-		{
-			if ( !data[key.toLowerCase()] )
-			{
-				data[key.toLowerCase()] = value;
-			}
-		}
 	}
 }
