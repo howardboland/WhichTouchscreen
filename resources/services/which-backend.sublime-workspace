@@ -1,0 +1,333 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"bor",
+				"border"
+			],
+			[
+				"mar",
+				"margin"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"ma",
+				"margin-top"
+			],
+			[
+				"pa",
+				"padding-right"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"p",
+				"position"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"li",
+				"list-style-type"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"t",
+				"table-row"
+			],
+			[
+				"m",
+				"margin"
+			],
+			[
+				"padding",
+				"padding-bottom"
+			],
+			[
+				"bo",
+				"border-bottom"
+			],
+			[
+				"op",
+				"option	Tag"
+			],
+			[
+				"ORD",
+				"ORDER_RULE"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"v",
+				"View"
+			],
+			[
+				"sc",
+				"scripts"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"selected_items":
+		[
+			[
+				"view",
+				"View In Browser"
+			],
+			[
+				"browser",
+				"View In Browser"
+			],
+			[
+				"brow",
+				"View In Browser"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"html f",
+				"Snippet: HTML - HTML foundation"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet:html",
+				"Snippet: html"
+			],
+			[
+				"package install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/Howard/Desktop/mifonecase/create.html",
+		"/Volumes/Super/ArtScience Talkshow",
+		"/Users/Howard/Desktop/mifonecase/css/main.css",
+		"/Users/Howard/Desktop/portfolio/content.xml",
+		"/Volumes/Super/workspace-mac/WhichTouchscreen/Application.as",
+		"/Users/Howard/Documents/workspace/Portfolio/src/Application.as",
+		"/Users/Howard/Desktop/mifonecase/css/fonts.css",
+		"/Users/Howard/Documents/workspace/RequireJs/app/index.html",
+		"/Users/Howard/Documents/workspace/RequireJs/app/scripts/main.js",
+		"/Volumes/Super/workspace-mac/Plantronic/deploy/index.html",
+		"/Volumes/KINGSTON/workspace/Plantronic/live/index.html",
+		"/Users/Howard/Documents/workspace/RequireJs/app/scripts/views/app.js",
+		"/Users/Howard/Documents/workspace/RequireJs/app/build/app.build.js",
+		"/Users/Howard/Documents/workspace/RequireJs/dist/scripts/main.js",
+		"/Users/Howard/Documents/workspace/RequireJs/app/build/build.sh",
+		"/Users/Howard/Documents/workspace/requirejs/app/css/main.css",
+		"/Users/Howard/Documents/workspace/requirejs/app/css/buttons.css",
+		"/Users/Howard/Documents/workspace/requirejs/.bowerrc",
+		"/Users/Howard/Documents/workspace/requirejs/bower.json",
+		"/Users/Howard/Documents/workspace/Art_From_Synthetic_Biology/src/assets/css/Fonts.css",
+		"/Users/Howard/Documents/workspace/RequireJs/app/css/style.css",
+		"/Users/Howard/Documents/workspace/RequireJs/app/scripts/views/apps.js",
+		"/Users/Howard/Documents/workspace/RequireJs/bower.json",
+		"/Users/Howard/Documents/workspace/RequireJs/.bowerrc",
+		"/Users/Howard/Library/Application Support/Sublime Text 2/Packages/User/View In Browser.sublime-settings",
+		"/Users/Howard/Documents/workspace/RequireJs/app.js",
+		"/Users/Howard/Documents/workspace/RequireJs/app/__init__.py",
+		"/Users/Howard/Documents/workspace/RequireJs/app/scripts/venor/underscore-amd/underscore.js",
+		"/Users/Howard/Documents/workspace/RequireJs/components.json",
+		"/Users/Howard/Documents/workspace/RequireJs/vendors",
+		"/Users/Howard/Documents/workspace/RequireJs/scripts",
+		"/Users/Howard/Documents/workspace/RequireJs/apps",
+		"/Users/Howard/Documents/workspace/RequireJs/app",
+		"/Users/Howard/Documents/workspace/RequireJs/vencor",
+		"/Users/Howard/Documents/workspace/RequireJs/vendor",
+		"/Users/Howard/Library/Application Support/Sublime Text 2/Packages/AdvancedNewFile/README.md"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"plantronics/",
+			"/plantronics/",
+			"\">\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 216.0,
+	"status_bar_visible": true
+}
