@@ -4,9 +4,14 @@
    http://www.alistapart.com/articles/fluid-images/ 
 */
 
+@import url('bootstrap.min.css'); /* guide: http://getbootstrap.com/*/
 @import url('fonts.css');
 @import url('navigation.css');
+@import url('news.css');
+@import url('newsform.css');
+@import url('login.css');
 @import url('../script/vendor/slimbox/css/slimbox2.css');
+
 
 
 
@@ -18,7 +23,7 @@ html, body {
 	font-size: 1em;
     font-family: 'TradeGothicLTPro',  sans-serif;
 	line-height: 1.4;
-
+	top:0;
 	position: relative;    
 	/*
 	-webkit-transition: opacity .5s ease-in-out;

@@ -11,7 +11,7 @@ require.config({
     'jquery.prettydate': 'vendor/jquery-prettydate/jquery.prettydate',
     'jquery.dateformat': 'vendor/jquery-dateFormat/jquery.dateFormat-1.0',
     'slimbox': 'vendor/slimbox/js/slimbox2',
-    text: "components/requirejs-text/text",
+    'text': "vendor/requirejs-text/text",
 
 	},
 

@@ -1,18 +1,19 @@
 define(['backbone',
-  'collection/NavigationCollection', //Request NavigationCollection.js
-  'view/NavigationListItem', //Request NavigationElementView.js
-  'model/NavigationModel', //Request NavigationElementView.js
-  'crossdomain' //Request NavigationElementView.js
-], function(Backbone, NavigationCollection, NavigationListItem, NavigationModel, crossdomain){
+  	'collection/NavigationCollection', //Request NavigationCollection.js
+  	'view/NavigationListItem', //Request NavigationElementView.js
+  	'model/NavigationModel', //Request NavigationElementView.js
+  	'crossdomain' //Request NavigationElementView.js
+], 	function(Backbone, NavigationCollection, NavigationListItem, NavigationModel, crossdomain)
+	{
 	var NavigationListView = Backbone.View.extend( {
 		el: '#menu ul',
-		template: _.template( $("#navigation-template").html()),
 		currentSelected: '',
 		events: {
 			/*'keypress .edit': 'updateOnEnter' */
 
 		},
-		render: function(){
+		render: function()
+		{
 			console.log( "Render Navigation " +this.collection.length);
 			//this.collection.unshift( (new NavigationModel()).set("name", "menu").set("title", "menu") )
 			for (var i=0;i<this.collection.length;i++)

@@ -1,8 +1,8 @@
-define(['backbone'], function(Backbone) {
+define(['text!templates/navigation.html','backbone'], function(Template, Backbone) {
 	var NavigationListItem = Backbone.View.extend( {
 		tagName: 'li',
 		className: 'menu-tab',
-		template: _.template( $("#navigation-template").html()),
+		template: _.template( Template ),
 		events: {
 			/*'keypress .edit': 'updateOnEnter' */
 		},

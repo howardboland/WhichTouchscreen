@@ -1,0 +1,20 @@
+#newsform {
+	
+	float:left;
+	width: auto;
+	margin-left:20px;
+	width: 200px;
+
+	/*position:absolute;
+	bottom:0;
+*/
+}
+
+#newsform > div {
+	padding:0px;
+	margin-bottom:0px;
+	margin-top:0px;
+	float:left;
+	width:auto;
+	clear:both;
+}

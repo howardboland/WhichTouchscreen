@@ -6,10 +6,12 @@ define(['jquery',
   'router/PageRouter', // Request PageRouter.js
   'collection/PageCollection', //Request PageCollection.js
   'view/LoaderView',
+  'view/LoginView',
   'view/PageView',
   'view/NavigationListView',
+  'view/NewsListView',
   'crossdomain'
-], function($, Modernizr, _, Backbone, EventMediator, PageRouter, PageCollection, LoaderView, PageView, NavigationListView) {
+], function($, Modernizr, _, Backbone, EventMediator, PageRouter, PageCollection, LoaderView, LoginView, PageView, NavigationListView, NewsListView) {
 
 	var initialize = function()
 	{
@@ -40,6 +42,7 @@ define(['jquery',
 	
 		this.page = null;
 		this.loaderView = new LoaderView;
+		new LoginView();
 		this.router = new PageRouter;
 
 		this.error = function(obj) {
@@ -49,6 +52,7 @@ define(['jquery',
 	
 		this.collection = new PageCollection;
 		this.navigation = new NavigationListView;
+		this.news = new NewsListView;
 
 
 /*

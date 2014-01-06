@@ -1,8 +1,8 @@
-define(['text!templates/loader.html', 'jquery', 'underscore', 'backbone',  'model/LoaderModel'], 
+define(['text!templates/login.html', 'jquery', 'underscore', 'backbone',  'model/LoginModel'], 
 	function(Template, $, _, Backbone, LoaderModel) {
 		
 		var LoaderView = Backbone.View.extend( {
-			el: '#loader',
+			el: '#login',
 			template: _.template( Template ),
 
 			events: {
@@ -28,16 +28,6 @@ define(['text!templates/loader.html', 'jquery', 'underscore', 'backbone',  'mode
 			},
 			onresize: function()
 			{
-				if ($(this.el).length>0)
-				{
-
-				
-				$(this.el).css({ "position" : "absolute", 	
-									left: ( ( $(window).width()-$(this.el).width() )/2 )+"px",
-									top: ( ( $(window).height()-$(this.el).height() )/2 )+"px",
-									})	
-				}
-
 				
 			},
 			completed: function()
