@@ -10,6 +10,7 @@ require.config({
 		'scrollTo': 'vendor/jquery.scrollTo/jquery.scrollTo',
     'jquery.prettydate': 'vendor/jquery-prettydate/jquery.prettydate',
     'jquery.dateformat': 'vendor/jquery-dateFormat/jquery.dateFormat-1.0',
+    'jquery.sortable': 'vendor/jquery-sortable/source/js/jquery-sortable-min',
     'slimbox': 'vendor/slimbox/js/slimbox2',
     'text': "vendor/requirejs-text/text",
 
@@ -40,6 +41,11 @@ require.config({
     'jquery.prettydate': {     //<-- cookie depends on Jquery and exports nothing
         deps: ['jquery'],
         exports: 'prettydate'
+
+    },
+    'jquery.sortable': {     //<-- cookie depends on Jquery and exports nothing
+        deps: ['jquery'],
+        exports: 'sortable'
 
     },
     'jquery.dateformat': {     //<-- cookie depends on Jquery and exports nothing

@@ -1,21 +1,25 @@
-define(['text!templates/newslist.html','backbone', 'jquery.ui',
+define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable',
   	'collection/NewsCollection', //Request NewsCollection.js
   	'view/NewsListItem', //Request NewsElementView.js
   	'model/NewsModel', //Request NewsElementView.js
   	'view/NewsFormView', //Request NewsElementView.js
   	'crossdomain' //Request NewsElementView.js
-], 	function(Template, Backbone, UI, NewsCollection, NewsListItem, NewsModel, NewsFormView, crossdomain)
+], 	function(Template, Backbone, UI, Sortable, NewsCollection, NewsListItem, NewsModel, NewsFormView, crossdomain)
 	{
 	var NewsListView = Backbone.View.extend( {
 		el: '#news',
 		newsform: new NewsFormView(),
 		currentSelected: '',
+		dropModel: null,
+		dragModel: null,
 		template: _.template( Template ),
 		events: {
 			'keypress #addnews': 'filterOnEnter',
 			'click #submit-news': 'create',
 			'click li.news' : 'select',
-			 'sortupdate'   :  'sorting'
+			'sortstart li.news'   :  'sortBegin',
+			'sortend li.news'   :  'sortEnd',
+			'render #news' : 'render'
           	
 
 		},
@@ -26,64 +30,42 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui',
 			this.$el.html( this.template() );
 			for (var i=0;i<this.collection.length;i++)
 			{
-				console.log( this.collection.at(i) )
+				//console.log( this.collection.at(i).get("orderid") )
 			 	var navItem = new NewsListItem( { model: this.collection.at(i) } );
 			 	var $item = $( navItem.render().el );
 			 	$(this.el).find("ul").append( $item );
-			 	//var $span = $($item.find("span"));
-			 	
-			 	//$span.css({  top : (($span.parent().height()-$span.height()) / 2)})
-			}
 
-			$(this.el).find("ul").sortable({ 
-				/*over: function( event, ui ) { 
-					ui.item.animate({opacity: .5}, 'fast')
-				},
-				out: function( event, ui ) { 
-					ui.item.animate({opacity:1}, 'fast')
-				},
-				stop: function( event, ui ) { 
-					console.log("change "+ui.item.index());
-					console.log("id"+$(event.target).data('id'))
-				}*/
-			});
-				/*
-				axis: "y",
-                connectWith: ".news",
-                receive: function(event, ui) {
-                    // do something here?
-                      	alert("");
-                },
-                update: function(el, ui) {
-              
-                    $(this).find('li > a').each(function(i){
-                        var id = $(this).attr('data-id');
-                        var model = this.collection.getByCid(id);
-                        alert(model)
-                        if(model.get('orderid') != i+1) model.set({orderid: i+1}, {silent: true});
-                    });
-                   //this.collection.sort();
-                }, stop: function(event, ui) {
-                	alert("dfd")
-            		ui.item.trigger('drop', ui.item.index());
-        		}
-            });*/
+			}
+/*			this.$el.find("ul li").draggable({revert: true})
+			this.$el.find("ul li a").droppable({drop: function(event, ui) {
+				   	//	console.log("drop "+ui.draggable[0].outerHTML)
+				   	//	console.log("drop "+$(event.target)[0].outerHTML)
+				   }});
+*/
 			this.update(this.currentSelected);
+
 			this.trigger('complete', this.collection);
 			
 		}, 
-		sorting:  function() 
+		sortBegin: function(e, model)
 		{
-			alert("")
-	      	_.each( this._listItems, function ( v ) {
-	            v.model.set("orderid", v.$el.index());
-	         });
-
-	      this.collection.sort({silent: true});
-	      this.render();
-
-	     // this.trigger('sorted');
-
+			this.dragModel = model;
+		},
+		sortEnd: function(e, model)
+		{
+			this.dropModel = model;
+			this.sort();
+		},
+		sort:  function() 
+		{
+			var wasOrderid = this.dragModel.get("orderid");
+			console.log(this.dragModel.get("title")+"=>"+this.dropModel.get("title"))
+			this.dragModel.set("orderid", this.dropModel.get("orderid"));
+			this.dropModel.set("orderid", wasOrderid);
+			this.dropModel.save();
+			this.dragModel.save();
+			this.collection.sort();
+			this.render();
 
 		},
 		update: function(id)

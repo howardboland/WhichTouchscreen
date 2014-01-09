@@ -7,7 +7,8 @@ define(['text!templates/newsform.html', 'jquery', 'underscore', 'backbone',  'mo
 			template: _.template( Template ),
 
 			events: {
-				'click .save' : 'save'
+				'click .save' : 'save',
+				'click .delete' : 'delete'
 				/*'keypress .edit': 'updateOnEnter' */
 			},
 			save: function()
@@ -29,6 +30,23 @@ define(['text!templates/newsform.html', 'jquery', 'underscore', 'backbone',  'mo
 			{
 				alert("Saved");
 				// Need to trigger update of list
+				this.$el.trigger('render');
+			},
+			delete: function()
+			{
+				
+				this.model.destroy( {	headers: {'accesskey' :'KEY_CODE_TO_BE_IMPLEMENTED'}, 
+										success: this.deleted, 
+										error: this.errorResult,
+										wait: true });
+			
+			},
+			deleted: function(model, resp)
+			{
+				alert("Deleted");
+				// Need to trigger update of list
+				  this.$el.trigger('render');
+				 
 			},
 			errorResult: function()
 			{

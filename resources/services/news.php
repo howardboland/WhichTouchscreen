@@ -14,16 +14,24 @@ Class News
 	function News( $row )
 	{
 		$this->id = $row["id"];
-		$this->header = $row["header"];
-		$this->title = $row["title"];
-		$this->body = $row["body"];
-		$this->url = isset($row["url"]) ? $row["url"] : '';
-		$this->public = $row["public"];
-		$this->orderid = $row["orderid"];
+		$this->header = isset($row["header"]) ? $row["header"] : NULL;
+		$this->title = isset($row["title"]) ? $row["title"] : NULL;
+		$this->body = isset($row["body"]) ? $row["url"] : NULL;
+		$this->url = isset($row["url"]) ? $row["url"] : NULL;
+		$this->public = isset($row["public"]) ? $row["public"] : NULL;
+		$this->orderid = isset($row["orderid"]) ? $row["orderid"] : NULL;
 	}
 }
 
-
+function delete($data)
+{
+	global $database_localhost, $localhost;
+	mysql_select_db($database_localhost, $localhost);
+	$query = sprintf("DELETE FROM news WHERE id=%s", GetSQLValueString($data->id,"int")) ;
+	$message = mysql_query($query, $localhost) or die(mysql_error());
+	$result = mysql_insert_id();
+	return new Result( $result, $message, $query);
+}
 function update($data)
 {
 	global $database_localhost, $localhost;
@@ -98,13 +106,19 @@ function init()
 	if (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']))
 		$method = $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'];
 	$values = json_decode(file_get_contents('php://input'), true);
-	if (isset($values) && isset($method))
+	if ( isset($method))
 	{
-		$values = new News( $values );
+		if (isset($values))
+		{
+			$values = new News( $values );	
+		} else {
+			$values = new News( $_GET );
+		}
+		
 		
 		
 		switch ($method) {
-			case 'PUT':
+			case "PUT":
 			
 				if ($values->id>0) //id exists - run update
 				{
@@ -115,7 +129,13 @@ function init()
 					return insert($values);
 				}
 				break;
-			
+			case "DELETE":
+				if ($values->id>0) //id exists - run update
+				{
+					return delete($values);
+				}
+				echo "DEKET";
+			break;
 			default:
 				//default output all public news
 				return ( selectAll() );
