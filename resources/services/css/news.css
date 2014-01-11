@@ -9,21 +9,28 @@
 */
 }
 
-#news div#insert {
+#news div.insert {
 	padding:0px;
 	margin-bottom:0px;
 	margin-top:0px;
-	float:left;
-	width:auto;
+	
+	clear: both;
+	width:500px;
 
 	
 }
-#news ul {
+div.insert input[type="text"] {
+	width: 80%;
+	margin-right:15px;
+	float:left;
+}
+#news ul
+{
 	padding:0px;
 	margin:0px;
 	text-indent: 0;
 	float:left;
-	width:500px;
+	width:100%;
 	overflow: hidden;
 
 }

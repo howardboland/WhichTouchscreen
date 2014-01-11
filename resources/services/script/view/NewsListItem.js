@@ -12,43 +12,47 @@ define(['text!templates/newsitem.html','backbone'], function(Template, Backbone)
 			 'dragleave' : 'dragLeave',
 			 'dragend' : 'dragEnd',
 			 'dragover' : 'dragOver',
+			 'keypress a': 'filterOnDelete',
 
 		},
 		render: function(){
-		//	console.log( "Render NavigationElementView" );
+			//console.log( "Render NewsListItem" );
 			//console.log( this.model.toJSON() );
 			this.$el.html( this.template( this.model.toJSON() ) );
+			//console.log( "selected "+ this.model.get("selected"))
+			//$(document).on("keypress", this.filterOnDelete);
+			if (this.model.get("selected")>0)
+				this.$el.find("a").addClass("selected").focus();
+			else
+				this.$el.find("a").removeClass("selected");
 			return this;
 
 		},
+		filterOnDelete: function(e) {
+	        if (e.keyCode != 100) return;
+	        if (window.confirm("Deleting item! Are you sure?"))	
+		        this.model.destroy();
+	     },
+		unrender: function()
+	    {
+	        $(this.el).fadeOut().animate({"height":"0px"});
+	    },
 		onSortStart: function(event) {
 			
 		},
 		onDrop: function(event) {
 			event.preventDefault();
-		//	console.log("drop: "+(event.target).outerHTML+" "+this.model.get("title"));
 	        this.$el.trigger('sortend', [this.model]);
 
 
     	}, 
     	onDrag: function(e) {
-		//	console.log("drag: "+(event.target).outerHTML+" "+this.model.get("title"));
-	        //this.$el.trigger('update-sort', [this.model, index]);
 	        
     	},  
     	dragStart: function(event) {
 			//event.preventDefault();
-			//console.log("dragStart");
 			this.$el.trigger('sortstart', [this.model]);
-			/*
-			var dragItem = $("<div id='draggable'/>");
-			$("body").append( dragItem.css({ position: "absolute", display: "block",
-				left:  event.pageX+"px",
-		        top:   event.pageY+"px",
-				"padding": this.$el.find("a").css("padding"),
-				"color": this.$el.find("a").css("color"),
-				width: this.$el.width()+"px", height: this.$el.find("a").height()+"px", "background": this.$el.find("a").css("background") }).text(  this.$el.text()  )  ) ;
-*/
+			
     	},  
     	dragLeave: function(event) {
 			event.preventDefault();
@@ -62,11 +66,15 @@ define(['text!templates/newsitem.html','backbone'], function(Template, Backbone)
 			event.preventDefault();
 		//	console.log("dragEnd")
     	},  
+    	change: function(event)
+    	{
+    		this.render();
+    	},
 		initialize : function()
 		{
 			_.bindAll(this);
 			console.log("Initialize NewsListItem");
-			this.model.on( 'change', this.render, this );
+			this.model.on( 'change', this.change, this );
 		}
 	});
 

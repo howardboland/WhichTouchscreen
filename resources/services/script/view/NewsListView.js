@@ -9,9 +9,9 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 	var NewsListView = Backbone.View.extend( {
 		el: '#news',
 		newsform: new NewsFormView(),
-		currentSelected: '',
-		dropModel: null,
-		dragModel: null,
+		currentSelected: -1,
+		dropmodel: null,
+		dragmodel: null,
 		template: _.template( Template ),
 		events: {
 			'keypress #addnews': 'filterOnEnter',
@@ -19,7 +19,7 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 			'click li.news' : 'select',
 			'sortstart li.news'   :  'sortBegin',
 			'sortend li.news'   :  'sortEnd',
-			'render #news' : 'render'
+			/*'keypress li.news' : 'delete'*/
           	
 
 		},
@@ -42,44 +42,34 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 				   	//	console.log("drop "+$(event.target)[0].outerHTML)
 				   }});
 */
-			this.update(this.currentSelected);
 
 			this.trigger('complete', this.collection);
 			
 		}, 
 		sortBegin: function(e, model)
 		{
-			this.dragModel = model;
+			this.dragmodel = model;
 		},
 		sortEnd: function(e, model)
 		{
-			this.dropModel = model;
+			this.dropmodel = model;
 			this.sort();
 		},
 		sort:  function() 
 		{
-			var wasOrderid = this.dragModel.get("orderid");
-			console.log(this.dragModel.get("title")+"=>"+this.dropModel.get("title"))
-			this.dragModel.set("orderid", this.dropModel.get("orderid"));
-			this.dropModel.set("orderid", wasOrderid);
-			this.dropModel.save();
-			this.dragModel.save();
+			var wasOrderid = this.dragmodel.get("orderid");
+			console.log(this.dragmodel.get("title")+"=>"+this.dropmodel.get("title"))
+			this.dragmodel.set("orderid", this.dropmodel.get("orderid"));
+			this.dropmodel.set("orderid", wasOrderid);
+			this.dropmodel.save();
+			this.dragmodel.save();
 			this.collection.sort();
 			this.render();
 
 		},
-		update: function(id)
+		delete: function()
 		{
-			$(this.el).find("li").removeClass("selected");
-			for (var i=0;i<this.collection.length;i++)
-			{
-				if (this.collection.at(i).get("id")==id)
-				{
-					$($(this.el).find("li")[i]).addClass("selected");
-					
-				}
-			}
-			this.currentSelected = id;
+			//alert("delete");
 		},
 		filterOnEnter: function(e) {
 	        if (e.keyCode != 13) return;
@@ -88,18 +78,47 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 		create: function()
 		{
 			//alert('creating new '+$("#addnews").val());
-			this.newsform.model = (new NewsModel()).set("title", $("#addnews").val()).set("header", $("#addnews").val());
-			this.newsform.render();
+			if ( $("#addnews").val().length>2)
+			{
+			var model = (new NewsModel()).set("title", $("#addnews").val()).set("header", $("#addnews").val());
+			model.save( {},{ headers: {'accesskey' :'KEY_CODE_TO_BE_IMPLEMENTED'}, 
+						 success: this.saved, 
+						 error: this.errorResult });
+			} else {
+				alert("Please provide longer title...");
+			}
+		},
+		saved: function(model, resp)
+		{
+			model.set("id", resp.result);
+			console.log(this.collection.length)
+			this.collection.add( model );
+			console.log(this.collection.length)
+			this.edit( model );
+		},
+		errorResult: function(resp)
+		{
+			console.log("Error...");
+			// Need to trigger update of list
+			//this.$el.trigger('render');
 		},
 		select: function(e)
 		{
 
 			e.preventDefault();
-			
+			var model = this.collection.get($(e.target).data("id"));
+			this.edit( model );
 			//alert('creating new '+$("#addnews").val());
-			this.newsform.model = this.collection.get($(e.target).data("id"));
-			this.newsform.render();
+			
 			// we should create a new model and open input form.
+		},
+		edit: function( model )
+		{
+			this.collection.each(function(m) { m.set("selected", -1)});
+			model.set("selected", 1);
+			this.newsform.model = model;
+			this.newsform.render();
+			this.newsform.on("delete", this.delete);
 		},
 		onresize: function()
 		{
@@ -108,6 +127,7 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 		initialize : function()
 		{
 			 _.bind(this, this.render);
+			 _.bindAll(this);
 			var self = this;
 			this.on( 'change', this.update, this );
 			this.collection = new NewsCollection;
@@ -118,6 +138,8 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 					success: function(){
 							console.info("NewsCollection successfully loaded"); 
 							self.render();
+							self.listenTo( self.collection, 'add', self.render );
+							self.listenTo( self.collection, 'remove', self.render );
 					},
 					error: function(data, response, status) {
 							
@@ -127,7 +149,8 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 							//for (var m in xhr.xhr)
 						//		console.error(m+" "+xhr.xhr[m]); 
 							self.trigger('error',["News", response]); }
-			})
+			});
+			$("#addnews").focus();
 			$(window).bind("resize", $.proxy(this.onresize, this));
 			console.log("Initialize NewsListView");
 		}

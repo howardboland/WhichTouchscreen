@@ -28,25 +28,26 @@ define(['text!templates/newsform.html', 'jquery', 'underscore', 'backbone',  'mo
 			},
 			saved: function(model, resp)
 			{
-				alert("Saved");
+				alert("Saved ");
 				// Need to trigger update of list
-				this.$el.trigger('render');
+				//this.$el.trigger('render');
 			},
 			delete: function()
 			{
-				
-				this.model.destroy( {	headers: {'accesskey' :'KEY_CODE_TO_BE_IMPLEMENTED'}, 
-										success: this.deleted, 
-										error: this.errorResult,
-										wait: true });
-			
+				if (window.confirm("Deleting item! Are you sure?"))
+				{
+					var self = this;
+					this.model.destroy( {	headers: {'accesskey' :'KEY_CODE_TO_BE_IMPLEMENTED'}, 
+											success: this.deleted, 
+											error: this.errorResult,
+											wait: true });
+				}
 			},
 			deleted: function(model, resp)
 			{
-				alert("Deleted");
 				// Need to trigger update of list
-				  this.$el.trigger('render');
-				 
+				  this.$el.trigger('delete');
+
 			},
 			errorResult: function()
 			{
@@ -63,7 +64,7 @@ define(['text!templates/newsform.html', 'jquery', 'underscore', 'backbone',  'mo
 			},
 			initialize : function()
 			{
-				
+				_.bindAll(this);
 				console.log("loader initiated")
 				$(this.loader).hide();
 				this.model = new NewsModel;
