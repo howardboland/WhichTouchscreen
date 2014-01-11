@@ -2,18 +2,22 @@
 <?php require_once('Connections/functions.php'); ?>
 <?php
 
-Class News
+Class Asset
 {
 	var $id;
+	var $pid;
+	var $name;
 	var $header;
 	var $title;
 	var $body;
 	var $url;
 	var $public;
 
-	function News( $row )
+	function Asset( $row )
 	{
 		$this->id = $row["id"];
+		$this->pid = isset($row["pid"]) ? $row["pid"] : NULL;
+		$this->name = isset($row["name"]) ? $row["name"] : NULL;
 		$this->header = isset($row["header"]) ? $row["header"] : NULL;
 		$this->title = isset($row["title"]) ? $row["title"] : NULL;
 		$this->body = isset($row["body"]) ? $row["url"] : NULL;
@@ -27,7 +31,7 @@ function delete($data)
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("DELETE FROM news WHERE id=%s", GetSQLValueString($data->id,"int")) ;
+	$query = sprintf("DELETE FROM assets WHERE id=%s", GetSQLValueString($data->id,"int")) ;
 	$message = mysql_query($query, $localhost) or die(mysql_error());
 	$result = mysql_insert_id();
 	return new Result( $result, $message, $query);
@@ -36,7 +40,7 @@ function update($data)
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("UPDATE news SET header=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
+	$query = sprintf("UPDATE assets SET header=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
 																									GetSQLValueString($data->title,"text"),
 																									GetSQLValueString($data->body,"text"),
 																									GetSQLValueString($data->url,"text"),
@@ -52,7 +56,7 @@ function insert($data)
 	global $database_localhost, $localhost;
 	
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("INSERT INTO news ( header, title, body, url, public, orderid ) VALUES (%s, %s, %s, %s, %s, %s)", 	GetSQLValueString($data->header,"text"),
+	$query = sprintf("INSERT INTO assets ( header, title, body, url, public, orderid ) VALUES (%s, %s, %s, %s, %s, %s)", 	GetSQLValueString($data->header,"text"),
 																											GetSQLValueString($data->title,"text"),
 																											GetSQLValueString($data->body,"text"),
 																											GetSQLValueString($data->url,"text"),
@@ -67,7 +71,7 @@ function select($id)
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("SELECT * FROM news where id=%s", GetSQLValueString($id, "int")) ;
+	$query = sprintf("SELECT * FROM assets where id=%s", GetSQLValueString($id, "int")) ;
 	$result = mysql_query($query, $localhost) or die(mysql_error());
 	return mysql_fetch_assoc($result);
 }
@@ -75,30 +79,30 @@ function selectAll()
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = "SELECT * FROM news ORDER BY orderid,id";
+	$query = "SELECT * FROM assets ORDER BY orderid,id";
 	$result = mysql_query($query, $localhost) or die(mysql_error());
-	$news = array();
+	$assets = array();
 	while ($row = mysql_fetch_assoc($result)) 
 	{
-		array_push($news, new News($row));
+		array_push($assets, new Asset($row));
 	}
 	
-	return $news;
+	return $assets;
 }
 
 function selectAllPublic()
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = "SELECT * FROM news where public=1  ORDER BY orderid,id";
+	$query = "SELECT * FROM assets where public=1  ORDER BY orderid,id";
 	$result = mysql_query($query, $localhost) or die(mysql_error());
-	$news = array();
+	$assets = array();
 	while ($row = mysql_fetch_assoc($result)) 
 	{
-		array_push($news, new News($row));
+		array_push($assets, new Asset($row));
 	}
 	
-	return $news;
+	return $assets;
 	
 }
 function init()
@@ -110,9 +114,9 @@ function init()
 	{
 		if (isset($values))
 		{
-			$values = new News( $values );	
+			$values = new Asset( $values );	
 		} else {
-			$values = new News( $_GET );
+			$values = new Asset( $_GET );
 		}
 		
 		
@@ -137,7 +141,7 @@ function init()
 				echo "DELETE";
 			break;
 			default:
-				//default output all public news
+				//default output all public assets
 				return ( selectAll() );
 				break;
 		}

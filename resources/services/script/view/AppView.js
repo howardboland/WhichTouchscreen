@@ -10,8 +10,9 @@ define(['jquery',
   'view/PageView',
   'view/NavigationListView',
   'view/NewsListView',
+  'view/AssetListView',
   'crossdomain'
-], function($, Modernizr, _, Backbone, EventMediator, PageRouter, PageCollection, LoaderView, LoginView, PageView, NavigationListView, NewsListView) {
+], function($, Modernizr, _, Backbone, EventMediator, PageRouter, PageCollection, LoaderView, LoginView, PageView, NavigationListView, NewsListView, AssetListView) {
 
 	var initialize = function()
 	{
@@ -52,7 +53,8 @@ define(['jquery',
 	
 		this.collection = new PageCollection;
 		this.navigation = new NavigationListView;
-		this.news = new NewsListView;
+		//this.news = new NewsListView;
+		this.assets = new AssetListView; 
 
 
 /*

@@ -1,0 +1,33 @@
+<div id="assetform">
+
+	
+	<div>
+		<label  class="control-label">Name:</label>
+		<input name="name" type="text" placeholder="Name" value="<%= name %>" class="form-control" />
+	</div>
+	<div>
+		<label  class="control-label">Header:</label>
+		<input name="header" type="text" placeholder="Header" value="<%= header %>" class="form-control" />
+	</div>
+	<div>
+		<label  class="control-label">Body:</label>
+		<textarea name="body" rows="6" placeholder="Body text"class="form-control"><%= body %></textarea>
+	</div>
+	<div>
+		<label  class="control-label">URL:</label>
+		<input name="url" type="text" placeholder="URL" value="<%= url %>" class="form-control" />
+	</div>
+	<div>
+		<label  class="control-label">Image:</label>
+		<input name="image" type="image" placeholder="Photo" value="<%= imageurl %>" class="form-control" />
+	</div>
+	<div>
+		<label  class="control-label">
+		<input type="checkbox" name="public" value="1" <% if (public>0) { %>checked="checked"<% } %>  /> Item Publicly Available:</label>
+	</div>
+	<div>
+		<input type="button" value="Cancel"  class="cancel btn btn-default" />
+		<input type="button" value="Delete"  class="delete btn btn-danger" />
+		<input type="button" value="Submit" class="save btn btn-primary btn-lg"/>
+	</div>
+</div>
