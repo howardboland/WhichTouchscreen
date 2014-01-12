@@ -10,15 +10,29 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 				'click .save' : 'save',
 				'click .delete' : 'delete',
 				'drop' : 'onDrop',
-				'dropable .photo' : 'onDrop',
-				'dragenter .photo' : 'onDrag',
-				'dragstart .photo' : 'dragStart',
-				'dragleave .photo' : 'dragLeave',
-				'dragend .photo' : 'dragEnd',
-				'dragover .photo' : 'dragOver',
-				'click .photo' : 'browse',
-				'change .upload-file-container input' : 'fileinputChange'
+				'dropable .mediaDrop' : 'onDrop',
+				'dragenter .mediaDrop' : 'onDrag',
+				'dragstart .mediaDrop' : 'dragStart',
+				'dragleave .mediaDrop' : 'dragLeave',
+				'dragend .mediaDrop' : 'dragEnd',
+				'dragover .mediaDrop' : 'dragOver',
+				'click .mediaDrop' : 'browse',
+				'change .upload-file-container input' : 'fileinputChange',
+				'change select[name="type"]' : 'changeType',
+				'change select[name="template"]' : 'changeTemplate'
 				/*'keypress .edit': 'updateOnEnter' */
+			},changeType: function(e)
+			{
+				var typeid = this.$el.find("select[name='type'] :selected").val();
+				this.model.set("typeid", typeid);
+				console.log("change type "+typeid);
+
+			},
+			changeTemplate: function(e)
+			{
+				var templateid = this.$el.find("select[name='template'] :selected").val();
+				this.model.set("typeid", templateid);
+				console.log("change template "+templateid);
 			},
 			browse: function()
 			{
@@ -28,12 +42,20 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 			save: function()
 			{
 				console.log("Saving id:"+this.model.get("id"));
+
+				if ( this.model.get("typeid") == 4)
+				{
+
+					this.model.set(	'content', { 
+									'title': this.$el.find('input[name="title"]').val(),
+									'header': this.$el.find('input[name="header"]').val(),
+									'body': this.$el.find('textarea[name="body"]').val(),
+									'weburl': this.$el.find('input[name="url"]').val() 
+									});
+				}
+
 				this.model.save( { 
 									'name': this.$el.find('input[name="name"]').val(),
-									'header': this.$el.find('input[name="header"]').val(),
-									'title'	: this.$el.find('input[name="title"]').val(),
-									'body'	: this.$el.find('textarea[name="body"]').val(),
-									'url'	: this.$el.find('input[name="url"]').val(),									
 									'public': this.$el.find('input[name="public"]').is(":checked") ? 1 : 0 
 							}, 
 							{ 	headers: {'accesskey' :'KEY_CODE_TO_BE_IMPLEMENTED'}, 
@@ -73,6 +95,28 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 				console.log("Render Assetform "+this.model.get("title"))
 				$(this.el).find("#assetform").remove();
 				$(this.el).append( this.template( this.model.toJSON() ));
+
+				if ( this.model.get("typeid") == 4)
+				{
+					
+					this.$el.find(".assetMediaLabel").each(function(index, e) {
+						$(e).parent().hide();
+					});	
+				} else 
+				{
+					this.$el.find("input[name='title'], input[name='header'], input[name='url'], textarea[name='body'],  select[name='template']").each(function(index, e) {
+						$(e).parent().hide();
+					});	
+				
+					if (this.model.get("typeid") == 1)
+					{
+						$(this.el).find(".assetMediaLabel").each(function(index, e) {
+							$(e).parent().hide();
+						});		
+					}
+					
+				}
+				
 				this.onresize();
 
 				$(this.el).find("#assetform").hide().fadeIn('slow');
@@ -110,8 +154,22 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 					alert(result.message);
 				else
 				{
-					$(".photo").attr("src", result.path)
-					this.model.set("source", result.path);
+					//update model based on drop target
+					this.imageTarget.attr("src", result.path)
+					switch (this.imageTarget.attr("id"))
+					{
+						case "assetMedia":
+							this.model.set("source", result.path);
+						break;
+						case "image1":
+							this.model.set("image_1", result.path);
+						break;
+						case "image2":
+							this.model.set("image_2", result.path);
+						break;
+					}
+				
+					
 
 				}	
 				
@@ -147,10 +205,11 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 			{
 				event.preventDefault();
 				 var e = event.originalEvent;
+				 this.imageTarget = $(event.target);
 				 var files = event.target.files || e.dataTransfer.files;
 
 		        var data = new FormData();
-		        data.append( "photo", files[0] );
+		        data.append( "assetMedia", files[0] );
 		        this.doUpload( data );
 				console.log("input file change")
 			},
@@ -159,7 +218,8 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 				event.preventDefault();
 		        var e = event.originalEvent;
 		        e.dataTransfer.dropEffect = 'copy';
-
+		        this.imageTarget = $(event.target);
+		        
 		        var files = e.target.files || e.dataTransfer.files;
 
 		        var data = new FormData();

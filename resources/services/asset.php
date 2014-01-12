@@ -1,34 +1,119 @@
 <?php require_once('Connections/localhost.php'); ?>
 <?php require_once('Connections/functions.php'); ?>
 <?php
+Class AssetTemplate
+{
+	var $id;
+	var $name;
+	var $source;
+
+	function AssetTemplate( $row )
+	{
+		$this->id = $row["id"];
+		$this->name = isset($row["name"]) ? $row["name"] : NULL;
+		$this->source = isset($row["source"]) ? $row["source"] : NULL;
+	}
+}
+
+Class AssetType
+{
+	var $id;
+	var $name;
+
+	function AssetType( $row )
+	{
+		$this->id = $row["id"];
+		$this->name = isset($row["name"]) ? $row["name"] : NULL;
+	}
+}
+
+Class Content
+{
+	var $id;
+	var $header;
+	var $title;
+	var $body;
+	var $image_1;
+	var $image_2;
+	var $buttonText;
+	var $weburl;
+
+
+	function Content( $row )
+	{
+		$this->id = $row["id"];
+		$this->header = isset($row["header"]) ? $row["header"] : NULL;
+		$this->title = isset($row["title"]) ? $row["title"] : NULL;
+		$this->body = isset($row["body"]) ? $row["body"] : NULL;
+		$this->image_1 = isset($row["image_1"]) ? $row["image_1"] : NULL;
+		$this->image_2 = isset($row["image_2"]) ? $row["image_2"] : NULL;
+		$this->buttonText = isset($row["buttonText"]) ? $row["buttonText"] : NULL;
+		$this->weburl = isset($row["weburl"]) ? $row["weburl"] : NULL;
+	}
+}
 
 Class Asset
 {
 	var $id;
 	var $pid;
+	var $typeid;
+	var $contentid;
+	var $templateid;
 	var $name;
-	var $header;
-	var $title;
-	var $body;
-	var $url;
 	var $public;
+	var $types;
+	var $source;
 
 	function Asset( $row )
 	{
 		$this->id = $row["id"];
 		$this->pid = isset($row["pid"]) ? $row["pid"] : NULL;
 		$this->typeid = isset($row["typeid"]) ? $row["typeid"] : NULL;
+		$this->contentid = isset($row["contentid"]) ? $row["contentid"] : NULL;
+		$this->templateid = isset($row["templateid"]) ? $row["templateid"] : NULL;
 		$this->source = isset($row["source"]) ? $row["source"] : NULL;
 		$this->name = isset($row["name"]) ? $row["name"] : NULL;
-		$this->header = isset($row["header"]) ? $row["header"] : NULL;
-		$this->title = isset($row["title"]) ? $row["title"] : NULL;
-		$this->body = isset($row["body"]) ? $row["body"] : NULL;
-		$this->url = isset($row["url"]) ? $row["url"] : NULL;
 		$this->public = isset($row["public"]) ? $row["public"] : NULL;
 		$this->orderid = isset($row["orderid"]) ? $row["orderid"] : NULL;
+		$this->types = getTypes();
+		$this->templates = getTemplates();
+		$this->content = isset($this->contentid) ? getContent( $this->contentid ) : NULL;
 	}
 }
 
+function getContent($id)
+{
+	global $database_localhost, $localhost;
+	$query = sprintf("SELECT * FROM content where id=%s", GetSQLValueString($id,"int") ) ;
+	$result = mysql_query($query, $localhost) or die(mysql_error());
+	$row = mysql_fetch_assoc($result);
+	return new Content($row);
+}
+
+function getTypes()
+{
+	global $database_localhost, $localhost;
+	$query = sprintf("SELECT * FROM asset_types") ;
+	$result = mysql_query($query, $localhost) or die(mysql_error());
+	$items = array();
+	while ($row = mysql_fetch_assoc($result)) 
+	{
+		array_push($items, new AssetType($row));
+	}
+	return $items;
+}
+function getTemplates()
+{
+	global $database_localhost, $localhost;
+	$query = sprintf("SELECT * FROM asset_templates") ;
+	$result = mysql_query($query, $localhost) or die(mysql_error());
+	$items = array();
+	while ($row = mysql_fetch_assoc($result)) 
+	{
+		array_push($items, new AssetTemplate($row));
+	}
+	return $items;
+}
 function delete($data)
 {
 	global $database_localhost, $localhost;
@@ -42,12 +127,19 @@ function update($data)
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("UPDATE assets SET name=%s, source=%s, typeid=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->name,"text"),
+	$query = sprintf("UPDATE assets SET name=%s, typeid=%s, contentid=%s, templateid=%s,source=%s,public=%s, orderid=%s WHERE id=%s", 
+																									GetSQLValueString($data->name,"text"),
+																									GetSQLValueString($data->typeid,"int"),
+																									GetSQLValueString($data->contentid,"int"),
+																									GetSQLValueString($data->templateid,"int"),
 																									GetSQLValueString($data->source,"text"),
-																									GetSQLValueString($data->typeid,"text"),
 																									GetSQLValueString($data->public,"int"),
 																									GetSQLValueString($data->orderid,"int"),
 																									GetSQLValueString($data->id,"int")) ;
+	if (isset($data->content))
+	{
+			
+	}
 	/*
 	$query = sprintf("UPDATE assets SET name=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
 																									GetSQLValueString($data->title,"text"),
