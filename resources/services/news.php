@@ -16,7 +16,7 @@ Class News
 		$this->id = $row["id"];
 		$this->header = isset($row["header"]) ? $row["header"] : NULL;
 		$this->title = isset($row["title"]) ? $row["title"] : NULL;
-		$this->body = isset($row["body"]) ? $row["url"] : NULL;
+		$this->body = isset($row["body"]) ? $row["body"] : NULL;
 		$this->url = isset($row["url"]) ? $row["url"] : NULL;
 		$this->public = isset($row["public"]) ? $row["public"] : NULL;
 		$this->orderid = isset($row["orderid"]) ? $row["orderid"] : NULL;

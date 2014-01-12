@@ -6,6 +6,10 @@
 		<input name="name" type="text" placeholder="Name" value="<%= name %>" class="form-control" />
 	</div>
 	<div>
+		<label  class="control-label">Title:</label>
+		<input name="title" type="text" placeholder="Title" value="<%= title %>" class="form-control" />
+	</div>
+	<div>
 		<label  class="control-label">Header:</label>
 		<input name="header" type="text" placeholder="Header" value="<%= header %>" class="form-control" />
 	</div>
@@ -19,7 +23,10 @@
 	</div>
 	<div>
 		<label  class="control-label">Image:</label>
-		<input name="image" type="image" placeholder="Photo" value="<%= imageurl %>" class="form-control" />
+		<div class="upload-file-container">
+			<img name="image" type="image" src="<%= source %>" class="form-control photo" />
+			<input name="upload" id="upload" type="file" />
+		</div>
 	</div>
 	<div>
 		<label  class="control-label">

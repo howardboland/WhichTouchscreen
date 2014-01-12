@@ -17,10 +17,12 @@ Class Asset
 	{
 		$this->id = $row["id"];
 		$this->pid = isset($row["pid"]) ? $row["pid"] : NULL;
+		$this->typeid = isset($row["typeid"]) ? $row["typeid"] : NULL;
+		$this->source = isset($row["source"]) ? $row["source"] : NULL;
 		$this->name = isset($row["name"]) ? $row["name"] : NULL;
 		$this->header = isset($row["header"]) ? $row["header"] : NULL;
 		$this->title = isset($row["title"]) ? $row["title"] : NULL;
-		$this->body = isset($row["body"]) ? $row["url"] : NULL;
+		$this->body = isset($row["body"]) ? $row["body"] : NULL;
 		$this->url = isset($row["url"]) ? $row["url"] : NULL;
 		$this->public = isset($row["public"]) ? $row["public"] : NULL;
 		$this->orderid = isset($row["orderid"]) ? $row["orderid"] : NULL;
@@ -40,13 +42,21 @@ function update($data)
 {
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
-	$query = sprintf("UPDATE assets SET header=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
+	$query = sprintf("UPDATE assets SET name=%s, source=%s, typeid=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->name,"text"),
+																									GetSQLValueString($data->source,"text"),
+																									GetSQLValueString($data->typeid,"text"),
+																									GetSQLValueString($data->public,"int"),
+																									GetSQLValueString($data->orderid,"int"),
+																									GetSQLValueString($data->id,"int")) ;
+	/*
+	$query = sprintf("UPDATE assets SET name=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
 																									GetSQLValueString($data->title,"text"),
 																									GetSQLValueString($data->body,"text"),
 																									GetSQLValueString($data->url,"text"),
 																									GetSQLValueString($data->public,"int"),
 																									GetSQLValueString($data->orderid,"int"),
 																									GetSQLValueString($data->id,"int")) ;
+	*/
 	$message = mysql_query($query, $localhost) or die(mysql_error());
 	$result = mysql_insert_id();
 	return new Result( $result, $message, $query);

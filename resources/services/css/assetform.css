@@ -23,3 +23,14 @@
 #assetform  input[type='text'],#assetform  textarea {
 	width:100%;
 }
+#assetform .photo
+{
+	background: #0000000;
+	min-width: 200px;
+	min-height: 200px;
+}
+
+#assetform .upload-file-container input {
+   filter: alpha(opacity=0);
+   opacity: 0;
+}
