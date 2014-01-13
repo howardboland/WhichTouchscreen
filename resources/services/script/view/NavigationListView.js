@@ -63,7 +63,7 @@ define(['backbone',
 			//$(".video-wrapper").switchClass("", "onscreen");
 			//$(".video-wrapper").animate({"left": "0"})
 			$(this.el).removeClass("show-menu-items").addClass( "hide-menu-items");
-			 $($(this.el).find(".menu-list a")).attr("href", "#menu")
+			$($(this.el).find(".menu-list a")).attr("href", "#menu")
 			
 		},
 		initialize : function()

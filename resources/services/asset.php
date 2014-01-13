@@ -123,8 +123,33 @@ function delete($data)
 	$result = mysql_insert_id();
 	return new Result( $result, $message, $query);
 }
+function updateContent($data)
+{
+	global $database_localhost, $localhost;
+	mysql_select_db($database_localhost, $localhost);
+	
+	$query = sprintf("UPDATE content SET header=%s, title=%s, body=%s, image_1=%s, image_2=%s, weburl=%s, buttonText=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
+																									GetSQLValueString($data->title,"text"),
+																									GetSQLValueString($data->body,"text"),
+																									GetSQLValueString($data->image_1,"text"),
+																									GetSQLValueString($data->image_2,"text"),
+																									GetSQLValueString($data->weburl,"text"),
+																									GetSQLValueString($data->buttonText,"text"),
+																									GetSQLValueString($data->id,"int")) ;
+	
+	$message = mysql_query($query, $localhost) or die(mysql_error());
+	$result = mysql_insert_id();
+	return new Result( $result, $message, $query);
+}
 function update($data)
 {
+
+	
+	if (isset($data->content))
+	{
+		$resultContent = updateContent( $data->content );	
+	}
+	return new Result(1, "a", "b");
 	global $database_localhost, $localhost;
 	mysql_select_db($database_localhost, $localhost);
 	$query = sprintf("UPDATE assets SET name=%s, typeid=%s, contentid=%s, templateid=%s,source=%s,public=%s, orderid=%s WHERE id=%s", 
@@ -136,19 +161,6 @@ function update($data)
 																									GetSQLValueString($data->public,"int"),
 																									GetSQLValueString($data->orderid,"int"),
 																									GetSQLValueString($data->id,"int")) ;
-	if (isset($data->content))
-	{
-			
-	}
-	/*
-	$query = sprintf("UPDATE assets SET name=%s, title=%s, body=%s, url=%s, public=%s, orderid=%s WHERE id=%s", GetSQLValueString($data->header,"text"),
-																									GetSQLValueString($data->title,"text"),
-																									GetSQLValueString($data->body,"text"),
-																									GetSQLValueString($data->url,"text"),
-																									GetSQLValueString($data->public,"int"),
-																									GetSQLValueString($data->orderid,"int"),
-																									GetSQLValueString($data->id,"int")) ;
-	*/
 	$message = mysql_query($query, $localhost) or die(mysql_error());
 	$result = mysql_insert_id();
 	return new Result( $result, $message, $query);

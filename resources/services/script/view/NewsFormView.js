@@ -65,6 +65,7 @@ define(['text!templates/newsform.html', 'jquery', 'underscore', 'backbone',  'mo
 			initialize : function()
 			{
 				_.bindAll(this);
+			
 				console.log("loader initiated")
 				$(this.loader).hide();
 				this.model = new NewsModel;

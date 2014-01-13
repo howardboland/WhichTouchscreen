@@ -132,6 +132,7 @@ define(['text!templates/assetform.html', 'jquery', 'underscore', 'backbone',  'm
 				this.on("complete", this.completed);
 				this.on("error", this.error);
 				$(window).bind("resize", $.proxy(this.onresize, this));
+				
 				this.onresize();	
 			},
 			onresize: function()

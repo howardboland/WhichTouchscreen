@@ -8,7 +8,7 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 	{
 	var NewsListView = Backbone.View.extend( {
 		el: '#news',
-		newsform: new NewsFormView(),
+		newsform: null,
 		currentSelected: -1,
 		dropmodel: null,
 		dragmodel: null,
@@ -116,6 +116,8 @@ define(['text!templates/newslist.html','backbone', 'jquery.ui', 'jquery.sortable
 		{
 			this.collection.each(function(m) { m.set("selected", -1)});
 			model.set("selected", 1);
+			if (this.newsform==null)
+				this.newsform = new NewsFormView();
 			this.newsform.model = model;
 			this.newsform.render();
 			this.newsform.on("delete", this.delete);
