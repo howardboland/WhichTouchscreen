@@ -2,7 +2,8 @@
 	"folders":
 	[
 		{
-			"path": "/Users/Howard/Documents/WhichTouchscreen/resources/services"
+			"follow_symlinks": true,
+			"path": "/Users/Howard/Documents/Adobe Flash Builder 4.7/WhichTouchscreen/resources/services"
 		}
 	]
 }
